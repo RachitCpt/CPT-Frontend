@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPT-Dashboard</title>
+ 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="./dashboard_updated.css">
+    <link rel="stylesheet" href="./home.css">
+</head>
+
+<body>
+    <!-- Header / Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="./CPT.jpg" alt="Company Logo" class="navbar-logo"> <!-- Logo Image -->
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Left-aligned navigation items -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="viewHome()">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Transaction</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarMasterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Master
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarMasterDropdown">
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#">Ticket</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="open_form_filter()">View Ticket</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Setup
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#" id="manageUsersMenu" onclick="loadUserTable()">Manage Users</a></li>
+                            <li><a class="dropdown-item" href="#" id="newUserMenu" onclick="addNewUser()"> New User</a></li>
+                            <li><a class="dropdown-item" href="#" id="manageRolesMenu" onclick="addNewRole()"> Manage Roles</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Right-aligned user menu -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUserLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user user-icon"></i> <span id="user_name_display"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUserLink" id="rolesDropdownUser">
+                            
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logout-btn" onclick="logout()">Logout</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+   <div class="container mt-5 pt-4 text-center" id="home-card">
+        <!-- <h1><strong>Welcome to The CPT-Dashboard</strong></h1> -->
+
+        <div class="dashboard">
+            <!-- Reminders Section -->
+            <div class="reminders">
+                <h3>Reminders</h3>
+                <ul>
+                    <li><strong>10</strong> High Priority Tickets</li>
+                    <li><strong>15</strong> Medium Priority Tickets</li>
+                    <li><strong>5</strong> Low Priority Tickets</li>
+                </ul>
+            </div>
+        
+            <!-- Quick Links Section -->
+            <div class="quick-links">
+                <h3>Quick Links</h3>
+                <div class="tile-row">
+                    <div class="tile" onclick="navigateTo('manageUsers')" id="manageUserTile">
+                        <i class="fas fa-users"></i>
+                        <h4>Manage Users</h4>
+                    </div>
+                    <div class="tile" onclick="navigateTo('manageRoles')" id="manageRoleTile">
+                        <i class="fas fa-user-cog"></i>
+                        <h4>Manage Roles</h4>
+                    </div>
+                    <div class="tile" onclick="navigateTo('newUser')" id="newUserTile">
+                        <i class="fas fa-user-plus"></i>
+                        <h4>New User</h4>
+                    </div>
+                    <div class="tile" onclick="navigateTo('viewTicket')" id="viewTicketTile">
+                        <i class="fas fa-ticket"></i>
+                        <h4>View Ticket</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        
+    </div>
+    
+    <div class="container mt-5 pt-4 " id="manage-user-card">
+        <h4><strong>Manage Users</strong></h4>
+        
+
+        <!-- User Information Table -->
+        <div class="card mt-4" id="user-table-card">
+            <div class="card-header">
+                <h5 class="card-title">User Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Mobile Number</th>
+                            <th>Role</th>
+                            <th id="actions-header" style="display: none;">Actions</th> <!-- New column for actions -->
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                       
+                        <tr class="details-row" id="details-row-1">
+                            <td colspan="7">
+                                <div id="detailsContent-1" class="table-responsive">
+                                    <!-- User details will be populated here -->
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+
+        <!-- Grid View for User Details -->
+        <div class="grid-view mt-4" id="grid-view" style="display: none;">
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                Changes saved successfully!
+            </div>
+            
+            <!-- <div id="errorMessage" class="alert alert-danger" style="display: none;">
+                Passwords do not match!
+            </div> -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-secondary" onclick="backToTable()">Back to User List</button>
+            </div>
+            <div class="grid-form">
+                <!-- <h5>User Details</h5> -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div id="error-firstName" class="text-danger small" style="display: none;">First Name is required.</div>
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" onblur="validateField('firstName', 'First Name is required')" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <div id="error-lastName" class="text-danger small" style="display: none;">Last Name is required.</div>
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" onblur="validateField('lastName', 'Last Name is required')" readonly>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <!-- <div class="mb-3">
+                    <label for="employee_id" class="form-label">EmployeeID</label>
+                    <input type="employee_id" class="form-control" id="employee_id" readonly>
+                </div> -->
+                <div class="mb-3">
+                    <div id="error-email" class="text-danger small" style="display: none;">Email is required.</div>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" onblur="validateField('email', 'Email is required')" readonly>
+                </div>
+                <div class="mb-3" id="passwordField" style="display: none;">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password">
+                    
+                </div>
+                <div class="mb-3" id="confirmPasswordField" style="display: none;">
+                    <div id="errorMessage" class="text-danger " style="display: none;">Passwords do not match.</div>
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword"  onblur="validatePassword()">
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="mobile" class="form-label">Mobile Number</label>
+                    <input type="text" class="form-control" id="mobile" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role</label>
+                    <select class="form-select" id="rolesDropdown" multiple aria-label="Role"></select>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <button class="btn btn-primary me-2" id="saveChangesBtn" onclick="saveChanges(this)">Save Changes</button>
+                        <button class="btn btn-secondary" id="cancelBtn" onclick="backToTable()">Cancel</button>
+                    </div>
+                    
+                </div>
+                
+                <button class="btn btn-secondary" id = "edit_buttons_v" onclick="enable_edit()" style="display: none;">Edit</button>
+                <button class="btn btn-secondary" id = "cancel_buttons_v" onclick="backToTable()" style="display: none;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role  Creation Form -->
+    
+    <div class="container mt-5 pt-4 scrollable-container" id="manage_role" style="display: none;">
+        <h4><strong>Manage Roles</strong></h4>
+        <div id="successMessageRole" class="alert alert-success" style="display: none;">
+            Role Created successfully!
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <button class="btn btn-primary me-2" id="saveChangesBtn" onclick="saveRoles(this)">Save</button>
+                <button class="btn btn-secondary" id="cancelBtn" onclick="backToHome()">Cancel</button>
+            </div>
+            
+        </div>
+
+        
+        <div class="row" id="manage-role-section">
+            
+            <div class="col-md-4">
+                <label for="roleName" class="form-label">Role Name</label>
+                <input type="text" class="form-control" id="roleName" required>
+
+            </div>
+            <!-- <div class="col-md-4">
+                <label for="role_id" class="form-label">Role ID</label>
+                <input type="role_id" class="form-control" id="role_id">
+            </div> -->
+            
+        </div>
+        </div>
+
+    <!--  Role Creation Form End -->
+    
+    
+    <div class="container mt-5 pt-4" id="manage_ticket" style="display: none;">
+        <h4><strong>Manage Tickets</strong></h4>
+        <div id="filter-section" class="p-3 mb-4 border rounded bg-light">
+            <!-- Error Message -->
+            <div id="error-message" class="alert alert-danger text-center" style="display: none;">Please select both dates!</div>
+        
+            <div class="row g-3">
+                <!-- From Date -->
+                <div class="col-md-3" id="fromDateFilter">
+                    <label for="fromDate" class="form-label fw-bold">From Date:</label>
+                    <input type="date" id="fromDate" class="form-control">
+                </div>
+        
+                <!-- To Date -->
+                <div class="col-md-3" id="toDateFilter">
+                    <label for="toDate" class="form-label fw-bold">To Date:</label>
+                    <input type="date" id="toDate" class="form-control">
+                </div>
+        
+                
+
+                <!-- Search Button -->
+                <div class="col-md-12 text-end">
+                    <button class="btn btn-primary mt-3 px-4" onclick="showTicket()">Search</button>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <!-- Tickets Table Card View -->
+        <div class="card mt-4" id="ticket-table-card" >
+            <div class="card-header">
+                <h5 class="card-title">Ticket Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <!-- Filter Toggle -->
+                    <div class="col-md-12 text-center" id="ticketTableFilter" style="display: none;">
+                        <span class="fw-bold">Filter by:</span>
+                        <a href="#" id="filterByAssignedToLink" class="filter-link active" onclick="showFilter('assignedTo')">Assigned To</a> |
+                        <a href="#" id="filterByTicketNumberLink" class="filter-link" onclick="showFilter('ticketNumber')">Ticket Number</a>
+                    </div>
+                </div>
+                
+                <!-- Filters Section -->
+                <div class="row mb-3" id="filterCondition" style="display: none;">
+                    <!-- Filter by Assigned To -->
+                    <div class="col-md-4" id="filterAssignedToContainer" style="display: none;">
+                        <label for="filterAssignedTo" class="form-label fw-bold">Filter by Assigned To:</label>
+                        <select id="filterAssignedTo" class="form-control">
+                            <option value="">All</option>
+                            <!-- Options populated dynamically -->
+                        </select>
+                    </div>
+                
+                    <!-- Filter by Ticket Number -->
+                    <div class="col-md-4" id="filterTicketNumberContainer" style="display: none;">
+                        <label for="filterTicketNumber" class="form-label fw-bold">Filter by Ticket Number:</label>
+                        <input type="text" id="filterTicketNumber" class="form-control" placeholder="Enter Ticket Number">
+                    </div>
+                
+                    <!-- Apply Filters Button -->
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" onclick="applyTableFilters()" id="applyFilterButton">Apply Filters</button>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100" onclick="clearFilter()" id="clearFilterButton" style="display: none;">Clear</button>
+                    </div>
+                </div>
+                
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            
+                        <th>Customer</th>
+                        <th>Ticket Number</th>
+                        <th>Raised Date</th>
+                        <th>Description</th>
+                        <th>Assigned To</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticket-table-body">
+                        
+                    </tbody>
+                </table>
+                <div id="pagination" class="pagination"></div>
+            </div>
+        </div>
+    
+        <!-- Grid View for Ticket Details -->
+        <!-- <div id="loader" style="display: none; text-align: center;">
+            <img src="./img/Spinner-3.gif" alt="Loading...">
+        </div> -->
+        <div id="loader-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
+            <div id="loader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <img src="./img/Spinner-3.gif" alt="Loading...">
+            </div>
+        </div>
+        <div class="grid-view-tkt mt-4" id="grid-view-ticket" >
+            <div id="successTicketMessage" class="alert alert-success" style="display: none;">
+                Changes saved successfully!
+            </div>    
+            <div class="card">
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <button class="btn btn-secondary" onclick="backToTicket()">Back to Ticket</button>
+                    </div>
+                    <h5>Ticket Details</h5>
+                    
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticketCustomer" class="form-label">Customer</label>
+                            <input type="text" class="form-control" id="ticketCustomer" readonly>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticket-ticketNumber" class="form-label">Ticket Number</label>
+                            <textarea class="form-control" id="ticket-ticketNumber" rows="1" readonly></textarea>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticketRaisedDate" class="form-label">Raised Date</label>
+                            <input type="text" class="form-control" id="ticketRaisedDate" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticketDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="ticketDescription" rows="3" readonly></textarea>
+                            <!-- <input type="text" class="form-control" id="ticketDescription" readonly> -->
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticketAssignTo" class="form-label">Assigned To</label>
+                            <select class="form-control" id="ticketAssignTo" disabled>
+                                <!-- Role options will be populated here -->
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticketPriority" class="form-label">Priority</label>
+                            <select class="form-control" id="ticketPriority" disabled>
+                                  
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="ticketStatus" class="form-label">Status</label>
+                            <select class="form-control" id="ticketStatus" disabled>
+                                  
+                            </select>
+                        </div>
+                        
+                    </div>
+                    
+                    <div id="edit-buttons" style="display: none;">
+                        <button class="btn btn-primary" onclick="saveTicketChanges()">Save Changes</button>
+                        <button class="btn btn-secondary" onclick="cancelEditTicketChanges()">Cancel</button>
+                    </div>
+                    <button class="btn btn-warning" id="editButton" onclick="enableEdit(this)">Edit Ticket</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+    <!-- Footer -->
+    <footer class="footer mt-auto">
+        <div class="container text-center">
+            <p>&copy; 2024 Connate People Technology.</p>
+            <small>Version 1.0.0</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (requires Popper for dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script src="./dashboard-updated.js"></script>
+    <script>
+    
+     document.querySelectorAll('.dropdown-submenu').forEach(function(submenu) {
+    submenu.addEventListener('mouseover', function() {
+        submenu.querySelector('.dropdown-menu').style.opacity = '1';
+    });
+    submenu.addEventListener('mouseout', function() {
+        submenu.querySelector('.dropdown-menu').style.opacity = '0';
+    });
+});
+   </script>
+    
+</body>
+
+</html>
