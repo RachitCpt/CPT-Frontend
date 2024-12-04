@@ -48,15 +48,18 @@
 
         <!-- Role -->
         <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select class="form-control">
-                <option value="admin">Admin</option>
-                <option value="editor">Support Engineer</option>
-                <option value="viewer">Viewer</option>
-                <option value="guest">Guest</option>
-            </select>
+        <label for="role" class="form-label">Role</label>
+        <div class="dropdown">
+            <input type="text" id="selectedOptions" class="form-control" readonly data-bs-toggle="dropdown" placeholder = "Select Roles">
+            <ul class="dropdown-menu" id="dropdownMenu">
+                <li><a class="dropdown-item"><input type="checkbox" value="Admin" class="option-checkbox"> Admin</a></li>
+                <li><a class="dropdown-item"><input type="checkbox" value="Support Engineer" class="option-checkbox"> Support Engineer</a></li>
+                <li><a class="dropdown-item"><input type="checkbox" value="Viewer" class="option-checkbox"> Viewer</a></li>
+                <li><a class="dropdown-item"><input type="checkbox" value="Guest" class="option-checkbox"> Guest</a></li>
+            </ul>
         </div>
-
+    </div>
+    
         <!-- Buttons -->
         <div class="d-flex">
             <button type="submit" class="btn btn-primary me-2">Save Changes</button>
@@ -67,5 +70,25 @@
 
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Handle checkbox change events
+    const checkboxes = document.querySelectorAll('.option-checkbox');
+    const selectedOptionsInput = document.getElementById('selectedOptions');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedOptions);
+    });
+
+    function updateSelectedOptions() {
+        const selectedOptions = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        selectedOptionsInput.value = selectedOptions.join(', ');
+    }
+</script>
+
+
 </body>
 </html>
