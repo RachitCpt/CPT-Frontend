@@ -45,16 +45,16 @@
           <div id="message" class="error"></div>
         </div>
         <!-- Mobile Number -->
-        <div class="mb-3">
-            <label for="mobile" class="form-label">Mobile Number</label>
-            <input type="tel" class="form-control" id="mobile" required>
-        </div>
+        <div class="mb-3" id="mobileForm">
+         <label for="mobile"class="form-label">Mobile Number:</label>
+         <input type="text" id="mobile" class="form-control" name="mobile" placeholder="Enter 10-digit number" pattern="\d{10}" required>
+      </div>
 
         <!-- Role -->
         <div class="mb-3">
         <label for="role" class="form-label">Role</label>
         <div class="dropdown">
-            <input type="text" id="selectedOptions" class="form-control" readonly data-bs-toggle="dropdown">
+            <input type="text" id="selectedOptions" class="form-control" readonly data-bs-toggle="dropdown" required>
             <ul class="dropdown-menu" id="dropdownMenu">
                 <li><a class="dropdown-item"><input type="checkbox" value="Admin" class="option-checkbox"> Admin</a></li>
                 <li><a class="dropdown-item"><input type="checkbox" value="Support Engineer" class="option-checkbox"> Support Engineer</a></li>
@@ -100,7 +100,6 @@
     nameInput.addEventListener('invalid', (event) => {
       if (nameInput.validity.valueMissing) {
         nameInput.setCustomValidity('First Name is required');
-        firstName.style.display = 'block';
       } else {
         nameInput.setCustomValidity(''); 
       }
@@ -134,17 +133,35 @@
   const message = document.getElementById('message');
 
   confirmPasswordField.addEventListener('input', () => {
-    if (confirmPasswordField.value === '') {
-      message.textContent = ''; // Clear the message if the field is empty
-    } else if (passwordField.value !== confirmPasswordField.value) {
-      message.textContent = 'Passwords do not match!';
-      message.className = 'error';
-    } else {
-      message.textContent = 'Passwords match!';
-      message.className = 'success';
-    }
-  });
+      if (passwordField.value !== confirmPasswordField.value) {
+        message.textContent = 'Passwords do not match!';
+      } else {
+        message.textContent = ''; // Clear the message if passwords match
+      }
+    });
 </script>
+<script>
+  //Handle Mobile Number validation
+  const form = document.getElementById('mobileForm');
+        const mobileInput = document.getElementById('mobile');
+        const errorMessage = document.getElementById('error');
+
+        form.addEventListener('submit', (event) => {
+            if (!mobileInput.checkValidity()) {
+                event.preventDefault();
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+                alert('Phone number is valid');
+            }
+        });
+
+        mobileInput.addEventListener('input', () => {
+            errorMessage.style.display = 'none';
+        });
+    </script>
+       
+ 
 <script>
   //Handle Form Submission
   function myFunction() {
