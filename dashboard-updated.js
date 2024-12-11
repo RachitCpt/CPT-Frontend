@@ -69,6 +69,10 @@
     // Hide the table view
     
     // loadRolesDropdown(userId);
+    document.getElementById('error-firstName').style.display = "none";
+    document.getElementById('error-lastName').style.display = "none";
+    document.getElementById('error-email').style.display = "none";
+    document.getElementById('errorMobile').style.display='none';
     document.getElementById('user-table-card').style.display = 'none';
     document.getElementById('manage_role').style.display='none';
     // Show the grid view with user details
@@ -119,7 +123,10 @@
     function editUser(userId) {
     // Hide the table view
         toggleEditMode(true, userId);
-        
+        document.getElementById('error-firstName').style.display = "none";
+        document.getElementById('error-lastName').style.display = "none";
+        document.getElementById('error-email').style.display = "none";
+        document.getElementById('errorMobile').style.display='none';
         document.getElementById('user-table-card').style.display = 'none';
         document.getElementById('edit_buttons_v').style.display = 'none';
         document.getElementById('cancel_buttons_v').style.display = 'none';
@@ -329,6 +336,9 @@ async function saveChanges(event) {
 // Function to add a new user
 function addNewUser() {
     console.log("adding new user");
+    document.getElementById('error-firstName').style.display = "none";
+    document.getElementById('error-lastName').style.display = "none";
+    document.getElementById('error-email').style.display = "none";
     document.getElementById("successMessage").style.display = "none";
     document.getElementById("manage-user-card").style.display = "block";
     document.getElementById("grid-view").style.display = "block";
@@ -1372,6 +1382,28 @@ function validatePassword() {
     } else {
         errorField.style.display = 'none'; // Hide error message
     }
+}
+
+function validateMobile(inputtxt) {
+    document.getElementById('errorMobile').style.display='none';
+    console.log(inputtxt.value);
+    var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    if(inputtxt.value.match(phoneno))
+          {
+        return true;
+          }
+        else
+          {
+          document.getElementById('errorMobile').style.display='block';
+          return false;
+          }
+}
+function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    if ((charCode < 48 || charCode > 57))
+        return false;
+
+    return true;
 }
 
 function showFilter(filterType) {
