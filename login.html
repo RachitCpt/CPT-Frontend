@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    .logo-container {
+        text-align: center; /* Center the logo */
+        margin-bottom: 20px; /* Space between logo and form */
+    }
+    .login-logo {
+        max-width: 150px; /* Set a smaller maximum width */
+        height: auto; /* Maintain aspect ratio */
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- Logo Container -->
+        <div class="logo-container">
+            <img src="./CPT.jpg" alt="Company Logo" class="login-logo">
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <h2 class="text-center">Login</h2>
+
+                <!-- Error Message Container -->
+                <div class="alert alert-danger mt-3 d-none" id="error-message"></div>
+
+                <!-- Login Form -->
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Reset error message before new login attempt
+            document.getElementById('error-message').classList.add('d-none');
+            document.getElementById('error-message').innerText = '';
+
+            // Prepare the form data
+            let formData = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            // Send the login request to the API
+            fetch('/api/user/login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    // If login is successful
+                    if (response.ok) {
+                        return response.json(); // Parse the JSON response
+                    } else {
+                        throw new Error('Invalid login credentials'); // Throw error if response status is not OK
+                    }
+                })
+                .then(data => {
+                    if (data.token.access) {
+                        // Store JWT tokens in localStorage
+                        localStorage.setItem('access_token', data.token.access);
+                        localStorage.setItem('refresh_token', data.token.refresh);
+
+                        // Redirect to dashboard after successful login
+                        window.location.href = 'dashboard_updated.html';
+                    }
+                })
+                .catch(error => {
+                    // Show error message on invalid login
+                    document.getElementById('error-message').innerText = 'Login failed. Please check your email and password.';
+                    document.getElementById('error-message').classList.remove('d-none');
+                });
+        });
+
+    </script>
+</body>
+
+</html>
