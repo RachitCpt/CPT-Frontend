@@ -197,7 +197,7 @@
                 <div class="mb-3">
                     <div id="error-email" class="text-danger small" style="display: none;">Email is required.</div>
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" onblur="validateField('email', 'Email is required')" readonly>
+                    <input type="email" class="form-control" id="email" onblur="validateField('email', 'Email is required')" onfocus="checkEmailFormat('email', 'Invalid email format')"required>
                 </div>
                 <div class="mb-3" id="passwordField" style="display: none;">
                     <label for="password" class="form-label">Password</label>

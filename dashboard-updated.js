@@ -1569,6 +1569,14 @@ function navigateTo(page) {
     }
 }
 
-function emailvalidation(){
 
+function checkEmailFormat(fieldId, invalidMessage) {
+    const field = document.getElementById(fieldId);
+    const errorField = document.getElementById(`error-${fieldId}`);
+    if (field.value.trim() && !field.checkValidity()) {
+        errorField.style.display = 'block'; // Show error message
+        errorField.textContent = invalidMessage; // Set invalid format text
+    } else {
+        errorField.style.display = 'none'; // Hide error message
+    }
 }
