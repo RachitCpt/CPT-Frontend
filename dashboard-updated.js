@@ -1568,3 +1568,7 @@ function navigateTo(page) {
             console.error("Unknown navigation action:", page);
     }
 }
+
+function emailvalidation(){
+
+}
