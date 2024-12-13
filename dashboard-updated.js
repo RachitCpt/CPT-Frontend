@@ -5,6 +5,7 @@
     let user_access = "";
     let fromDate = "";
     let toDate = "";
+	let apiUrl = "http://127.0.0.1:80/":
     const StatusEnum = {
         NOT_STARTED: { id: 1, name: "Not Started" },
         IN_PROGRESS: { id: 2, name: "In Progress" },
@@ -265,7 +266,7 @@ async function saveChanges(event) {
             console.log(user_id);
             console.log("Added New User");
             try {
-            const response = await fetch('/api/user/create-user/', { // Replace with actual API URL
+            const response = await fetch(apiUrl+'api/user/create-user/', { // Replace with actual API URL
                 method: 'POST', // Use PUT for updates
                 headers: {
                     'Content-Type': 'application/json',
@@ -300,7 +301,7 @@ async function saveChanges(event) {
     try {
         
         console.log("Updated Existing User");
-        const response = await fetch('/api/user/users/'+user_id+'/role/', { // Replace with actual API URL
+        const response = await fetch(apiUrl+'api/user/users/'+user_id+'/role/', { // Replace with actual API URL
             method: 'PUT', // Use PUT for updates
             headers: {
                 'Content-Type': 'application/json',
@@ -470,7 +471,7 @@ async function showTicket() {
     
     try {
         // Make an API call (replace 'your-api-endpoint' with actual URL)
-        const response = await fetch('/api/user/getCases/', {
+        const response = await fetch(apiUrl+'api/user/getCases/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -812,7 +813,7 @@ async function saveTicketChanges(){
 
     try {
         // Make an API call (replace 'your-api-endpoint' with actual URL)
-        const response = await fetch('/api/user/updateTicket/', {
+        const response = await fetch(apiUrl+ 'api/user/updateTicket/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -955,7 +956,7 @@ async function loadRolesDropdown(selectedRoleIds = []) {
             window.location.href = 'login.html';
             return;
         }
-        const response = await fetch('api/user/roles/', {
+        const response = await fetch(apiUrl + 'api/user/roles/', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1073,7 +1074,7 @@ async function showUserProfile() {
     }
 
     try {
-        const response = await fetch('/api/user/profile/', {
+        const response = await fetch(apiUrl+ 'api/user/profile/', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1130,7 +1131,7 @@ function loadUserTable() {
 
     if (user_access.includes('Admin')){
     actionsHeader.style.display = '';
-    fetch("/api/user/users/",{
+    fetch(apiUrl + "api/user/users/",{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -1177,7 +1178,7 @@ function loadUserTable() {
     }
     else{
         actionsHeader.style.display = 'none';
-        fetch('/api/user/profile/', {
+        fetch(apiUrl+'api/user/profile/', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1218,7 +1219,7 @@ function fetchAssigneesAndSetupDropdown(dropdown_id, selected_id) {
         window.location.href = 'login.html'; // Redirect to login if no token
     }
 
-    fetch("/api/user/getAssignee/", {
+    fetch(apiUrl + "api/user/getAssignee/", {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1311,7 +1312,7 @@ async function saveRoles(ele){
         "page_ids": []
     };
     try {
-        const response = await fetch('/api/user/create-role/', { // Replace with actual API URL
+        const response = await fetch(apiUrl + 'api/user/create-role/', { // Replace with actual API URL
             method: 'POST', // Use PUT for updates
             headers: {
                 'Content-Type': 'application/json',
@@ -1500,7 +1501,7 @@ async function fetchAssigneesSetupFilterDropdown(dropdownId, assignees = [], sel
                 return;
             }
 
-            const response = await fetch('/api/user/getAssignees/', {
+            const response = await fetch(apiUrl + 'api/user/getAssignees/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
