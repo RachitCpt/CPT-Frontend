@@ -5,7 +5,7 @@
     let user_access = "";
     let fromDate = "";
     let toDate = "";
-	let apiUrl = "http://127.0.0.1:80/":
+	let apiUrl = "http://127.0.0.1:80/";
     const StatusEnum = {
         NOT_STARTED: { id: 1, name: "Not Started" },
         IN_PROGRESS: { id: 2, name: "In Progress" },
