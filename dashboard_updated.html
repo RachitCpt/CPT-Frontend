@@ -399,7 +399,7 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                             <label for="ticketDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="ticketDescription" rows="3" readonly></textarea>
+                            <textarea class="form-control" id="ticketDescription" rows="1" readonly></textarea>
                             <!-- <input type="text" class="form-control" id="ticketDescription" readonly> -->
                         </div>
                         
@@ -422,6 +422,22 @@
                             <select class="form-control" id="ticketStatus" disabled>
                                   
                             </select>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="start-date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="start-date" name="start-date" readonly>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="end-date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="end-date" name="end-date" readonly>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="hours-spent" class="form-label">Hours Spent</label>
+                            <input type="number" class="form-control" id="hours-spent" name="hours-spent" step="0.5">
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="task-done-by" class="form-label">Task Done By</label>
+                            <input type="text" class="form-control" id="task-done-by" name="task-done-by" readonly>
                         </div>
                         
                     </div>
