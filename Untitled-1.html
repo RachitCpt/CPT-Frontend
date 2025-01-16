@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Match Validation</title>
+  <style>
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Password Validation</h2>
+  <form id="passwordForm">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br><br>
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    <br><br>
+    <button type="submit">Submit</button>
+    <div id="errorMessage" class="error"></div>
+  </form>
+
+  <script>
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    const message = document.getElementById('message');
+
+    // Add input event listener to check passwords in real-time
+    confirmPasswordField.addEventListener('input', () => {
+      if (confirmPasswordField.value === '') {
+        message.textContent = ''; // Clear the message if the field is empty
+      } else if (passwordField.value !== confirmPasswordField.value) {
+        message.textContent = 'Passwords do not match!';
+        message.className = 'error';
+      } else {
+        message.textContent = 'Passwords match!';
+        message.className = 'success';
+      }
+    });
+
+    // Prevent form submission if passwords do not match
+    document.getElementById('passwordForm').addEventListener('submit', function(event) {
+      if (passwordField.value !== confirmPasswordField.value) {
+        event.preventDefault(); // Stop form submission
+        message.textContent = 'Passwords do not match!';
+        message.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>
