@@ -5,7 +5,6 @@
     let user_access = "";
     let fromDate = "";
     let toDate = "";
-	let apiUrl = "http://127.0.0.1:80/";
     const StatusEnum = {
         NOT_STARTED: { id: 1, name: "Not Started" },
         IN_PROGRESS: { id: 2, name: "In Progress" },
@@ -266,7 +265,7 @@ async function saveChanges(event) {
             console.log(user_id);
             console.log("Added New User");
             try {
-            const response = await fetch(apiUrl+'api/user/create-user/', { // Replace with actual API URL
+            const response = await fetch('/api/user/create-user/', { // Replace with actual API URL
                 method: 'POST', // Use PUT for updates
                 headers: {
                     'Content-Type': 'application/json',
@@ -301,7 +300,7 @@ async function saveChanges(event) {
     try {
         
         console.log("Updated Existing User");
-        const response = await fetch(apiUrl+'api/user/users/'+user_id+'/role/', { // Replace with actual API URL
+        const response = await fetch('/api/user/users/'+user_id+'/role/', { // Replace with actual API URL
             method: 'PUT', // Use PUT for updates
             headers: {
                 'Content-Type': 'application/json',
@@ -471,7 +470,7 @@ async function showTicket() {
     
     try {
         // Make an API call (replace 'your-api-endpoint' with actual URL)
-        const response = await fetch(apiUrl+'api/user/getCases/', {
+        const response = await fetch('/api/user/getCases/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -698,7 +697,27 @@ function viewTicket(tickets) {
     document.getElementById('ticketAssignTo').value = tickets.getAttribute('assignedTo');
     document.getElementById('ticketPriority').value = tickets.getAttribute('priority');
     document.getElementById('ticketStatus').value = tickets.getAttribute('status');
+    
 
+    const currentDate = new Date();
+
+    const formatDate = (date) => {
+            return date.toISOString().split('T')[0];
+        };
+        document.getElementById('start-date').value = formatDate(currentDate);
+        document.getElementById('end-date').value = formatDate(currentDate);
+        for (const key in AssigneeEnum) {
+            if (AssigneeEnum.hasOwnProperty(key)) {
+                console.log(AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0]));
+                if (AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0])) {
+                    console.log(AssigneeEnum[key].id);
+                    document.getElementById('task-done-by').setAttribute("done_id", AssigneeEnum[key].id);
+                    document.getElementById('task-done-by').value = AssigneeEnum[key].name;
+                    
+                    
+                }
+            }
+        }
     // Populate grid view with ticket details (this would usually come from an API)
     // if (ticketId === 1) {
     //     document.getElementById("ticketTitle").value = "Server Issue";
@@ -713,13 +732,15 @@ function viewTicket(tickets) {
     populateDropdownAssignee('ticketAssignTo',tickets.getAttribute('assignedTo'));
     populateStatusDropdown(tickets.getAttribute('status'));
     populatePriorityDropdown(tickets.getAttribute('priority'));
+    document.getElementById('hours-spent').value = " ";
     document.getElementById('ticketCustomer').readOnly = true;
     document.getElementById('ticket-ticketNumber').readOnly = true;
     document.getElementById('ticketRaisedDate').readOnly = true;
     document.getElementById('ticketDescription').readOnly = true;
     document.getElementById('ticketAssignTo').disabled = true;
     document.getElementById('ticketPriority').disabled = true;
-    document.getElementById('ticketStatus').disabled = true;
+    document.getElementById('ticketStatus').disabled = true; 
+    document.getElementById('hours-spent').disabled = true;
     document.getElementById("edit-buttons").style.display = "none";
     document.getElementById("editButton").style.display = "block";
 }
@@ -755,6 +776,14 @@ function enableEdit(ticketId) {
 }
 function editTicket(tickets) {
     // Hide the ticket table and show the grid view
+
+    const currentDate = new Date();
+
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+    document.getElementById('hours-spent').value = "";
+    document.getElementById('hours-spent').disabled = false;
     document.getElementById('successTicketMessage').style.display = 'none';
     document.getElementById("ticket-table-card").style.display = "none";
     document.getElementById("grid-view").style.display = "block";
@@ -769,8 +798,21 @@ function editTicket(tickets) {
     document.getElementById('ticketAssignTo').value = tickets.getAttribute('assignedTo');
     document.getElementById('ticketPriority').value = tickets.getAttribute('priority');
     document.getElementById('ticketStatus').value = tickets.getAttribute('status');
-
+    
+    document.getElementById('start-date').value = formatDate(currentDate);
+    document.getElementById('end-date').value = formatDate(currentDate);
+    for (const key in AssigneeEnum) {
+        if (AssigneeEnum.hasOwnProperty(key)) {
+            console.log(AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0]));
+            if (AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0])) {
+                document.getElementById('task-done-by').setAttribute("done_id", AssigneeEnum[key].id);
+                document.getElementById('task-done-by').value = AssigneeEnum[key].name;
+                
+            }
+        }
+    }
     // Populate grid view with ticket details (sample data, typically from an API)
+    document.getElementById('hours-spent').disabled = false;
     document.getElementById('ticketCustomer').readOnly = true;
     document.getElementById('ticket-ticketNumber').readOnly = true;
     document.getElementById('ticketRaisedDate').readOnly = true;
@@ -807,13 +849,17 @@ async function saveTicketChanges(){
         "status": document.getElementById('ticketStatus').value,
         "message": document.getElementById('ticketDescription').value,
         "priority": document.getElementById('ticketPriority').value,
-        "assignedto": document.getElementById('ticketAssignTo').value
+        "assignedto": document.getElementById('ticketAssignTo').value,
+        "startdate": document.getElementById("start-date").value,
+        "enddate": document.getElementById("end-date").value,
+        "hours_spent": document.getElementById('hours-spent').value,
+        "task_doneby" :document.getElementById('task-done-by').getAttribute("done_id")
     }
     console.log(body_data);
 
     try {
         // Make an API call (replace 'your-api-endpoint' with actual URL)
-        const response = await fetch(apiUrl+ 'api/user/updateTicket/', {
+        const response = await fetch('/api/user/updateTicket/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -956,7 +1002,7 @@ async function loadRolesDropdown(selectedRoleIds = []) {
             window.location.href = 'login.html';
             return;
         }
-        const response = await fetch(apiUrl + 'api/user/roles/', {
+        const response = await fetch('api/user/roles/', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1074,7 +1120,7 @@ async function showUserProfile() {
     }
 
     try {
-        const response = await fetch(apiUrl+ 'api/user/profile/', {
+        const response = await fetch('/api/user/profile/', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1131,7 +1177,7 @@ function loadUserTable() {
 
     if (user_access.includes('Admin')){
     actionsHeader.style.display = '';
-    fetch(apiUrl + "api/user/users/",{
+    fetch("/api/user/users/",{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -1178,7 +1224,7 @@ function loadUserTable() {
     }
     else{
         actionsHeader.style.display = 'none';
-        fetch(apiUrl+'api/user/profile/', {
+        fetch('/api/user/profile/', {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1219,7 +1265,7 @@ function fetchAssigneesAndSetupDropdown(dropdown_id, selected_id) {
         window.location.href = 'login.html'; // Redirect to login if no token
     }
 
-    fetch(apiUrl + "api/user/getAssignee/", {
+    fetch("/api/user/getAssignee/", {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
@@ -1312,7 +1358,7 @@ async function saveRoles(ele){
         "page_ids": []
     };
     try {
-        const response = await fetch(apiUrl + 'api/user/create-role/', { // Replace with actual API URL
+        const response = await fetch('/api/user/create-role/', { // Replace with actual API URL
             method: 'POST', // Use PUT for updates
             headers: {
                 'Content-Type': 'application/json',
@@ -1501,7 +1547,7 @@ async function fetchAssigneesSetupFilterDropdown(dropdownId, assignees = [], sel
                 return;
             }
 
-            const response = await fetch(apiUrl + 'api/user/getAssignees/', {
+            const response = await fetch('/api/user/getAssignees/', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -1569,6 +1615,14 @@ function navigateTo(page) {
     }
 }
 
-function emailvalidation(){
 
+function checkEmailFormat(fieldId, invalidMessage) {
+    const field = document.getElementById(fieldId);
+    const errorField = document.getElementById(`error-${fieldId}`);
+    if (field.value.trim() && !field.checkValidity()) {
+        errorField.style.display = 'block'; // Show error message
+        errorField.textContent = invalidMessage; // Set invalid format text
+    } else {
+        errorField.style.display = 'none'; // Hide error message
+    }
 }
