@@ -44,7 +44,13 @@
                                     <li><a class="dropdown-item" href="#" onclick="open_form_filter()">View Ticket</a></li>
                                 </ul>
                             </li>
-                        </ul>
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#">Project</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick="showProjects()">View Projects</a></li>
+                                </ul>  
+                            </li>
+                        </ul>   
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -76,7 +82,73 @@
             </div>
         </div>
     </nav>
-
+    <!--Project Section-->
+    <div class="container mt-5 pt-4" id="project-section" style ="display:none">
+        <div class="header">Projects</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Task</th>
+                    <th>Task Description</th>
+                    <th>Assigned To</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Project A</td>
+                    <td>Task 1</td>
+                    <td>Design the homepage</td>
+                    <td>John Doe</td>
+                    <td>In Progress</td>
+                    <td>
+                        <button class="btn btn-info" onclick="viewProjectDetails('A', 'Task 1', 'Design the homepage', 'John Doe', 'In Progress')">View</button>
+                        <button class="btn btn-warning" onclick="viewProjectDetails('A', 'Task 1', 'Design the homepage', 'John Doe', 'In Progress')">Edit</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--Project Section Ends-->
+    <!--Project Details Section Start-->
+    <div class="container mt-5" id="project-details-section"  style ="display:none">
+        <div class="container_2">
+            <button class="btn btn-secondary" onclick="backToProjects()">Back to Projects</button>
+            <div class="header">Project Details</div>
+            <form>
+                <div class="form-group">
+                    <label for="project">Project</label>
+                    <input type="text" id="project" name="project">
+                </div>
+                <div class="form-group">
+                    <label for="task">Project Task</label>
+                    <input type="text" id="task" name="task">
+                </div>
+                <div class="form-group">
+                    <label for="description">Task Description</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-done-by">Task Done By</label>
+                    <input type="text" id="task-done-by" name="task-done-by">
+                </div>
+                <div class="form-group">
+                    <label for="start-date">Start Date</label>
+                    <input type="date" id="start-date" name="start-date">
+                </div>
+                <div class="form-group">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" name="end-date">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="save-button">Save Changes</button>
+                    <button type="button" class="cancel-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Main Content -->
    <div class="container mt-5 pt-4 text-center" id="home-card">
         <!-- <h1><strong>Welcome to The CPT-Dashboard</strong></h1> -->

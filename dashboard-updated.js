@@ -27,6 +27,8 @@
     let AssigneeEnum = {};
 
     function viewHome(){
+        document.getElementById('project-section').style.display = 'none';
+        document.getElementById('project-details-section').style.display = 'none';
         document.getElementById("manage-user-card").style.display = "none";
         document.getElementById("user-table-card").style.display = "none";
         document.getElementById("ticket-table-card").style.display = "none";
@@ -48,8 +50,38 @@
         
 
     }
+    function showProjects() {
+        document.getElementById('home-card').style.display = 'none';
+        document.getElementById('project-section').style.display = 'block';
+        document.getElementById('project-details-section').style.display = 'none';
+        document.getElementById("manage-user-card").style.display = "none";
+        document.getElementById("user-table-card").style.display = "none";
+        document.getElementById('manage_role').style.display='none';
+        document.getElementById("edit-buttons").style.display = 'none';
+    }
+
+    function viewProjectDetails(project, task, desc, assignedTo, status) {
+        document.getElementById('project-section').style.display = 'none';
+        document.getElementById('project-details-section').style.display = 'block';
+        document.getElementById('project-name').textContent = project;
+        document.getElementById('task-name').textContent = task;
+        document.getElementById('task-desc').textContent = desc;
+        document.getElementById('assigned-to').textContent = assignedTo;
+        document.getElementById('task-status').textContent = status;
+        document.getElementById("manage-user-card").style.display = "none";
+        document.getElementById("user-table-card").style.display = "none";
+        document.getElementById('manage_role').style.display='none';
+        document.getElementById("edit-buttons").style.display = 'none';
+    }
+
+    function backToProjects() {
+        document.getElementById('project-details-section').style.display = 'none';
+        document.getElementById('project-section').style.display = 'block';
+    }
 
     function viewUsers(){
+        document.getElementById('project-section').style.display = 'none';
+        document.getElementById('project-details-section').style.display = 'none';
         document.getElementById("manage-user-card").style.display = "block";
         document.getElementById("user-table-card").style.display = "block";
         document.getElementById("ticket-table-card").style.display = "none";
@@ -107,6 +139,8 @@
 
 
     function addNewRole(){
+        document.getElementById('project-section').style.display = 'none';
+        document.getElementById('project-details-section').style.display = 'none';
         document.getElementById('manage_role').style.display='inline-block';
         document.getElementById("manage-user-card").style.display = "none";
         document.getElementById("grid-view").style.display = "none";
@@ -336,13 +370,15 @@ async function saveChanges(event) {
 // Function to add a new user
 function addNewUser() {
     console.log("adding new user");
+    document.getElementById('project-section').style.display = 'none';
+    document.getElementById('project-details-section').style.display = 'none';
     document.getElementById('error-firstName').style.display = "none";
     document.getElementById('error-lastName').style.display = "none";
     document.getElementById('error-email').style.display = "none";
     document.getElementById("successMessage").style.display = "none";
     document.getElementById("manage-user-card").style.display = "block";
     document.getElementById("grid-view").style.display = "block";
-    document.getElementById("user-table-card").style.display = "none";
+    document.getElementById("user-table-card").style.display = "none";f
     document.getElementById("edit-buttons").style.display = 'block';
     document.getElementById('home-card').style.display = 'none';
     document.getElementById('passwordField').style.display = 'block';
@@ -395,6 +431,8 @@ function open_form_filter(){
     localStorage.removeItem('toDate');
     const ticketsBody = document.getElementById('ticket-table-body');
     ticketsBody.innerHTML = '';
+    document.getElementById('project-section').style.display = 'none';
+    document.getElementById('project-details-section').style.display = 'none';
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('fromDateFilter').style.display = 'block';
     document.getElementById('toDateFilter').style.display = 'block';
@@ -422,6 +460,8 @@ function open_form_filter(){
     
     // document.getElementById('date-selection-grid').style.display='inline-block';
 }
+
+
 async function showTicket() {
     // Hide the ticket table and show the grid view
     
@@ -951,6 +991,8 @@ function populatePriorityDropdown(selectedStatusId = null) {
 function backToTicket() {
     // Show ticket table and hide the grid view
     showTicket();
+    document.getElementById('project-section').style.display = 'none';
+    document.getElementById('project-details-section').style.display = 'none';
     document.getElementById("ticket-table-card").style.display = "block";
     document.getElementById("manage_ticket").style.display = "block";
     document.getElementById("grid-view-ticket").style.display = "none";
@@ -1152,6 +1194,8 @@ function loadUserTable() {
     // Fetch data from your API endpoint
     const users_role = JSON.parse(localStorage.getItem('user_role'));
     const accessToken = localStorage.getItem('access_token');
+    document.getElementById('project-section').style.display = 'none';
+    document.getElementById('project-details-section').style.display = 'none';
     document.getElementById("manage-user-card").style.display = "block";
     
     
