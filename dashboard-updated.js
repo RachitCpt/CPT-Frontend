@@ -1680,143 +1680,6 @@ function openProjects() {
     
     }
 
-// async function showProject() {
-
-//     // Hide the project table and show the grid view
-    
-//     document.getElementById('ProjectfilterCondition').style.display = 'none';
-//     document.getElementById('error-message-project').style.display = 'none';
-//     document.getElementById('fromDateProject').classList.remove('input-error');
-//     document.getElementById('endDateProject').classList.remove('input-error');
-    
-    
-//     // document.getElementById('pagination-project').style.display='inline-block';
-   
-//     fromDateProject = localStorage.getItem('fromDateProject');
-//     endDateProject = localStorage.getItem('endDateProject');
-    
-    
-//     if (fromDateProject && fromDateProject.trim() !== "" && endDateProject && endDateProject.trim() !== "") {
-//         console.log("Both fromDateProject and endDateProject exist and have values.");
-//     } else {
-//         fromDateProject = document.getElementById('fromDateProject').value;
-//         endDateProject = document.getElementById('endDateProject').value;
-//     }
-    
-
-//     localStorage.setItem('fromDate',fromDateProject);
-//     localStorage.setItem('endDate',endDateProject);
-
-//     // Check if dates are selected
-//     if (!fromDateProject || !endDateProject) {
-//         // Show error message
-//         document.getElementById('error-message-project').style.display = 'block';
-//         // Add error styling
-//         if (!fromDateProject) {
-//             document.getElementById('fromDateProject').classList.add('input-error');
-//         }
-//         if (!endDateProject) {
-//             document.getElementById('endDateProject').classList.add('input-error');
-//         }
-//         return; // Exit the function if dates are not selected
-//     }
-//     let accessToken = localStorage.getItem('access_token');
-//     if (!accessToken) {
-//         window.location.href = 'login.html'; // Redirect to login if no token
-//     }
-//     console.log("user_id");
-//     document.getElementById('loader-overlay-project').style.display = 'block';
-    
-//     try {
-//         // Make an API call (replace 'your-api-endpoint' with actual URL)
-//         const response = await fetch('/api/user/getProject/', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': 'Bearer ' + accessToken,
-
-//             },
-
-//             body: JSON.stringify({
-//                 "fromDate": document.getElementById('fromDateProject').value,
-//                 "endDate": document.getElementById('endDateProject').value
-//             })
-//         })
-
-//         // Check if the response is ok
-
-//         if (response.status === 401) {
-//             console.warn("Access token expired. Redirecting to login...");
-//             window.location.href = 'login.html';
-//             return;
-//         }
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         const projectBody = document.getElementById('project-table-body');
-//         projectBody.innerHTML = ''; // Clear existing data
-//         const project_response = await response.json();
-//         console.log(project_response);
-//         project_response.forEach(project => {
-    
-//             const row = document.createElement('tr');
-//             console.log(project);
-    
-    
-//             row.innerHTML = `
-//         <td>${project.projectName}</td>
-//         <td>${project.projectTask}</td>
-//         <td>${project.projectTaskDescription}</td>
-//         <td>${project.assignedTo}</td>
-//         <td>${project.status}</td>
-//         <td class="action-buttons" >
-//             <button class="btn btn-info btn-sm me-2" customer=${JSON.stringify(project.projectName)} ticketNumber=${JSON.stringify(project.projectName)}   onclick="viewTicket(this)">View</button>
-//             <button class="btn btn-warning btn-sm" customer=${JSON.stringify(project.projectName)} ticketNumber=${JSON.stringify(project.projectName)}   onclick="editTicket(this)">Edit</button>
-            
-//         </td>
-//     `;
-//         projectBody.appendChild(row);
-//             document.getElementById('filter-section').style.display = 'none';
-//         });
-//         // Parse the response JSON
-//         const projects = await response.json();
-//         let user_name = localStorage.getItem('user_name');
-//         let user_role = JSON.parse(localStorage.getItem('user_role'));
-//         console.log(user_name);
-//         if (user_access == ''){
-//             user_access = user_role.map(role => role.role_name);
-//         }
-//         // if (user_access.includes('Admin')){
-            
-            
-//         // }
-        
-        
-        
-        
-//     } catch (error) {
-//         console.error('There was a problem with the fetch operation:', error);
-//     } finally {
-//         // Hide loader after the API call
-//         console.log("final_entry");
-//         document.getElementById('loader-overlay-project').style.display = 'none';
-//     }
-
-//     document.getElementById("manage-user-card").style.display = "none";
-//     document.getElementById("user-table-card").style.display = "none";
-//     document.getElementById("project-table-card").style.display = "block";
-//     // document.getElementById("grid-view-project").style.display = "block";
-//     document.getElementById("manage_project").style.display = "block";
-//     document.getElementById('filter-section-project').style.display='none';
-//     document.getElementById('manage_role').style.display='none';
-//     document.getElementById('fromDateFilterProject').style.display='none';
-//     document.getElementById('toDateFilterProject').style.display='none';
-//     // document.getElementById('ProjectfilterCondition').style.display='block';
-//     document.getElementById('ProjectTableFilter').style.display='block';
-  
-
-// }
-
 async function showProject() {
     // Hide UI elements
     document.getElementById('ProjectfilterCondition').style.display = 'none';
@@ -1994,14 +1857,14 @@ function viewProject(projects) {
     document.getElementById('task-done-by-project').readOnly = true;
     document.getElementById('start-date').disabled = true;
     document.getElementById('end-date').disabled = true;
-    document.getElementById('hours-spent').disabled = true;
+    document.getElementById('hours-spent') = true;
     document.getElementById("edit-buttonsProjects").style.display = "none";
     document.getElementById("editButtonProject").style.display = "block";
 }
 
-function enableEditProject(ticketId) {
+function enableEditProject(project) {
     // Enable edit mode: make fields editable and show save/cancel buttons
-    console.log(ticketId);
+    console.log(project);
     document.getElementById('successProjectMessage').style.display = 'none';
     document.getElementById("project-table-card").style.display = "none";
     document.getElementById("grid-view").style.display = "block";
@@ -2092,6 +1955,30 @@ function editProject(projects) {
     
     // document.getElementById("editButton").style.display = "none";
 
+}
+
+function showFilterProject(filterType) {
+    const assignedToContainer = document.getElementById("filterAssignedToContainerProject");
+    const assignedToLink = document.getElementById("filterByAssignedToLinkProject");
+    
+    // Reset visibility
+    assignedToContainer.style.display = "none";
+    assignedToLink.classList.remove("active");
+    
+
+    // // Show selected filter and highlight link
+    // if (filterType === "assignedTo") {
+    //     assignedToContainer.style.display = "block";
+    //     assignedToLink.classList.add("active");
+    // } else if (filterType === "ticketNumber") {
+    //     ticketNumberContainer.style.display = "block";
+    //     ticketNumberLink.classList.add("active");
+    // }
+
+    // Display the filter row
+    document.getElementById("ProjectfilterCondition").style.display = "flex";
+    document.getElementById('applyFilterButtonProject').style.display = 'block';
+    document.getElementById('filterAssignedToContainerProject').style.display = 'block';
 }
 
 function applyTableFiltersProject() {
