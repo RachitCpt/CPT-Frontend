@@ -27,16 +27,17 @@
     let AssigneeEnum = {};
 
     function viewHome(){
-        document.getElementById('project-section').style.display = 'none';
-        document.getElementById('project-details-section').style.display = 'none';
+        document.getElementById('home-card').style.display = 'inline-block';
         document.getElementById("manage-user-card").style.display = "none";
         document.getElementById("user-table-card").style.display = "none";
         document.getElementById("ticket-table-card").style.display = "none";
+        document.getElementById("project-table-card").style.display = "none";
         // document.getElementById("grid-view-ticket").style.display = "block";
         document.getElementById("manage_ticket").style.display = "none";
-        document.getElementById('grid-view').style.display = 'none';
-        document.getElementById('home-card').style.display = 'inline-block';
+        document.getElementById("manage_project").style.display = "none";
+        // document.getElementById('grid-view').style.display = 'none';
         document.getElementById('manage_role').style.display='none';
+
         const active_user = localStorage.getItem('active_user');
         if (active_user == "Admin" || !active_user){
             document.getElementById('manageRoleTile').style.visibility='block';
@@ -50,44 +51,17 @@
         
 
     }
-    function showProjects() {
-        document.getElementById('home-card').style.display = 'none';
-        document.getElementById('project-section').style.display = 'block';
-        document.getElementById('project-details-section').style.display = 'none';
-        document.getElementById("manage-user-card").style.display = "none";
-        document.getElementById("user-table-card").style.display = "none";
-        document.getElementById('manage_role').style.display='none';
-        document.getElementById("edit-buttons").style.display = 'none';
-    }
-
-    function viewProjectDetails(project, task, desc, assignedTo, status) {
-        document.getElementById('project-section').style.display = 'none';
-        document.getElementById('project-details-section').style.display = 'block';
-        document.getElementById('project-name').textContent = project;
-        document.getElementById('task-name').textContent = task;
-        document.getElementById('task-desc').textContent = desc;
-        document.getElementById('assigned-to').textContent = assignedTo;
-        document.getElementById('task-status').textContent = status;
-        document.getElementById("manage-user-card").style.display = "none";
-        document.getElementById("user-table-card").style.display = "none";
-        document.getElementById('manage_role').style.display='none';
-        document.getElementById("edit-buttons").style.display = 'none';
-    }
-
-    function backToProjects() {
-        document.getElementById('project-details-section').style.display = 'none';
-        document.getElementById('project-section').style.display = 'block';
-    }
+    
 
     function viewUsers(){
-        document.getElementById('project-section').style.display = 'none';
-        document.getElementById('project-details-section').style.display = 'none';
         document.getElementById("manage-user-card").style.display = "block";
         document.getElementById("user-table-card").style.display = "block";
         document.getElementById("ticket-table-card").style.display = "none";
         // document.getElementById("grid-view-ticket").style.display = "block";
         document.getElementById("manage_ticket").style.display = "none";
         document.getElementById('grid-view').style.display = 'none';
+        document.getElementById('manage_project').style.display = 'none';
+        document.getElementById('grid-view-project').style.display = 'none';
         document.getElementById('home-card').style.display = 'none';
         document.getElementById('manage_role').style.display='none';
         
@@ -139,8 +113,7 @@
 
 
     function addNewRole(){
-        document.getElementById('project-section').style.display = 'none';
-        document.getElementById('project-details-section').style.display = 'none';
+        
         document.getElementById('manage_role').style.display='inline-block';
         document.getElementById("manage-user-card").style.display = "none";
         document.getElementById("grid-view").style.display = "none";
@@ -148,7 +121,10 @@
         document.getElementById("edit-buttons").style.display = 'block';
         document.getElementById('home-card').style.display = 'none';
         document.getElementById("ticket-table-card").style.display = "none";
+        document.getElementById("project-table-card").style.display = "none";
         document.getElementById("manage_ticket").style.display = "none";
+        document.getElementById('manage_project').style.display = 'none';
+        document.getElementById('grid-view-project').style.display = 'none';
         document.getElementById('successMessageRole').style.display = 'none';
         
 
@@ -370,23 +346,20 @@ async function saveChanges(event) {
 // Function to add a new user
 function addNewUser() {
     console.log("adding new user");
-    document.getElementById('project-section').style.display = 'none';
-    document.getElementById('project-details-section').style.display = 'none';
+    document.getElementById("manage-user-card").style.display = "block";
+    document.getElementById("grid-view").style.display = "block";
+    document.getElementById("edit-buttons").style.display = 'block';
+    document.getElementById('passwordField').style.display = 'block';
+    document.getElementById('confirmPasswordField').style.display = 'block';
+    document.getElementById('home-card').style.display = 'none'; // Ensure home-card is hidden
+    document.getElementById('manage_project').style.display = 'none';
+    document.getElementById('grid-view-project').style.display = 'none';
     document.getElementById('error-firstName').style.display = "none";
     document.getElementById('error-lastName').style.display = "none";
     document.getElementById('error-email').style.display = "none";
     document.getElementById("successMessage").style.display = "none";
-    document.getElementById("manage-user-card").style.display = "block";
-    document.getElementById("grid-view").style.display = "block";
-    document.getElementById("user-table-card").style.display = "none";f
-    document.getElementById("edit-buttons").style.display = 'block';
-    document.getElementById('home-card').style.display = 'none';
-    document.getElementById('passwordField').style.display = 'block';
-    document.getElementById('confirmPasswordField').style.display = 'block';
-    document.getElementById('manage_role').style.display='none';
-    
-
-    
+    document.getElementById("user-table-card").style.display = "none";
+    document.getElementById('manage_role').style.display = 'none';
     document.getElementById("manage_ticket").style.display = "none";
     // document.getElementById('grid-view').style.display = 'none';
     
@@ -431,8 +404,8 @@ function open_form_filter(){
     localStorage.removeItem('toDate');
     const ticketsBody = document.getElementById('ticket-table-body');
     ticketsBody.innerHTML = '';
-    document.getElementById('project-section').style.display = 'none';
-    document.getElementById('project-details-section').style.display = 'none';
+    // document.getElementById('project-section').style.display = 'none';
+    // document.getElementById('grid-view-project').style.display = 'none';
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('fromDateFilter').style.display = 'block';
     document.getElementById('toDateFilter').style.display = 'block';
@@ -448,6 +421,9 @@ function open_form_filter(){
     document.getElementById('filterCondition').style.display = 'none';
     document.getElementById('applyFilterButton').style.display = 'none';
     document.getElementById('ticketTableFilter').style.display = 'none';
+    document.getElementById('manage_project').style.display = 'none';
+    document.getElementById('project-table-card').style.display = 'none';
+    document.getElementById('grid-view-project').style.display = 'none';
     
     
     
@@ -992,7 +968,7 @@ function backToTicket() {
     // Show ticket table and hide the grid view
     showTicket();
     document.getElementById('project-section').style.display = 'none';
-    document.getElementById('project-details-section').style.display = 'none';
+    document.getElementById('grid-view-project').style.display = 'none';
     document.getElementById("ticket-table-card").style.display = "block";
     document.getElementById("manage_ticket").style.display = "block";
     document.getElementById("grid-view-ticket").style.display = "none";
@@ -1194,19 +1170,17 @@ function loadUserTable() {
     // Fetch data from your API endpoint
     const users_role = JSON.parse(localStorage.getItem('user_role'));
     const accessToken = localStorage.getItem('access_token');
-    document.getElementById('project-section').style.display = 'none';
-    document.getElementById('project-details-section').style.display = 'none';
-    document.getElementById("manage-user-card").style.display = "block";
+    document.getElementById('manage_project').style.display = 'none';
+    document.getElementById("manage-user-card").style.display = "block";   
+    document.getElementById("user-table-card").style.display = "block"; 
     
-    
-    document.getElementById("user-table-card").style.display = "block";
-    
-    
+    document.getElementById('home-card').style.display = 'none';  
+    document.getElementById('grid-view-project').style.display = 'none';    
     document.getElementById("ticket-table-card").style.display = "none";
+    document.getElementById("project-table-card").style.display = "none";
     // document.getElementById("grid-view-ticket").style.display = "block";
-    document.getElementById("manage_ticket").style.display = "none";
+    document.getElementById("manage_ticket").style.display = "none";   
     document.getElementById('grid-view').style.display = 'none';
-    document.getElementById('home-card').style.display = 'none';
     document.getElementById('manage_role').style.display='none';
     if (!accessToken) {
         window.location.href = 'login.html'; // Redirect to login if no token
@@ -1654,6 +1628,9 @@ function navigateTo(page) {
         case 'viewTicket':
             open_form_filter();
             break;
+        case 'viewProject':
+            openProjects();
+            break;
         default:
             console.error("Unknown navigation action:", page);
     }
@@ -1669,4 +1646,678 @@ function checkEmailFormat(fieldId, invalidMessage) {
     } else {
         errorField.style.display = 'none'; // Hide error message
     }
+}
+
+// Code for Project Section
+function openProjects() {
+    localStorage.removeItem('tickets');
+    localStorage.removeItem('fromDate');
+    localStorage.removeItem('toDate');
+    const projectsBody = document.getElementById('project-table-body');
+    projectsBody.innerHTML = '';
+   
+    
+    document.getElementById('filter-section-project').style.display = 'block';
+    document.getElementById('fromDateFilterProject').style.display = 'block';
+    document.getElementById('toDateFilterProject').style.display = 'block';
+    document.getElementById("manage_project").style.display = "block";
+    document.getElementById('project-table-body').style.display = 'block';
+    // document.getElementById('ProjectTableFilter').style.display = 'block';
+     // document.getElementById("project-table-card").style.display = "block";
+    // document.getElementById('ProjectfilterCondition').style.display = 'none';
+    // document.getElementById('pagination-project').style.display = 'block';
+    document.getElementById("manage-user-card").style.display = "none";
+    document.getElementById('manage_role').style.display='none'; 
+    document.getElementById("user-table-card").style.display = "none";
+    document.getElementById("ticket-table-card").style.display = "none";
+    document.getElementById("grid-view-ticket").style.display = "none";
+    document.getElementById("manage_ticket").style.display = "none";
+    document.getElementById("grid-view-project").style.display = "none";
+    document.getElementById('home-card').style.display = 'none';
+    document.getElementById('manage_role').style.display='none';
+    document.getElementById('applyFilterButtonProject').style.display = 'none';
+    document.getElementById('applyFilterButtonProject').style.display = 'none';
+    
+    }
+
+// async function showProject() {
+
+//     // Hide the project table and show the grid view
+    
+//     document.getElementById('ProjectfilterCondition').style.display = 'none';
+//     document.getElementById('error-message-project').style.display = 'none';
+//     document.getElementById('fromDateProject').classList.remove('input-error');
+//     document.getElementById('endDateProject').classList.remove('input-error');
+    
+    
+//     // document.getElementById('pagination-project').style.display='inline-block';
+   
+//     fromDateProject = localStorage.getItem('fromDateProject');
+//     endDateProject = localStorage.getItem('endDateProject');
+    
+    
+//     if (fromDateProject && fromDateProject.trim() !== "" && endDateProject && endDateProject.trim() !== "") {
+//         console.log("Both fromDateProject and endDateProject exist and have values.");
+//     } else {
+//         fromDateProject = document.getElementById('fromDateProject').value;
+//         endDateProject = document.getElementById('endDateProject').value;
+//     }
+    
+
+//     localStorage.setItem('fromDate',fromDateProject);
+//     localStorage.setItem('endDate',endDateProject);
+
+//     // Check if dates are selected
+//     if (!fromDateProject || !endDateProject) {
+//         // Show error message
+//         document.getElementById('error-message-project').style.display = 'block';
+//         // Add error styling
+//         if (!fromDateProject) {
+//             document.getElementById('fromDateProject').classList.add('input-error');
+//         }
+//         if (!endDateProject) {
+//             document.getElementById('endDateProject').classList.add('input-error');
+//         }
+//         return; // Exit the function if dates are not selected
+//     }
+//     let accessToken = localStorage.getItem('access_token');
+//     if (!accessToken) {
+//         window.location.href = 'login.html'; // Redirect to login if no token
+//     }
+//     console.log("user_id");
+//     document.getElementById('loader-overlay-project').style.display = 'block';
+    
+//     try {
+//         // Make an API call (replace 'your-api-endpoint' with actual URL)
+//         const response = await fetch('/api/user/getProject/', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': 'Bearer ' + accessToken,
+
+//             },
+
+//             body: JSON.stringify({
+//                 "fromDate": document.getElementById('fromDateProject').value,
+//                 "endDate": document.getElementById('endDateProject').value
+//             })
+//         })
+
+//         // Check if the response is ok
+
+//         if (response.status === 401) {
+//             console.warn("Access token expired. Redirecting to login...");
+//             window.location.href = 'login.html';
+//             return;
+//         }
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         const projectBody = document.getElementById('project-table-body');
+//         projectBody.innerHTML = ''; // Clear existing data
+//         const project_response = await response.json();
+//         console.log(project_response);
+//         project_response.forEach(project => {
+    
+//             const row = document.createElement('tr');
+//             console.log(project);
+    
+    
+//             row.innerHTML = `
+//         <td>${project.projectName}</td>
+//         <td>${project.projectTask}</td>
+//         <td>${project.projectTaskDescription}</td>
+//         <td>${project.assignedTo}</td>
+//         <td>${project.status}</td>
+//         <td class="action-buttons" >
+//             <button class="btn btn-info btn-sm me-2" customer=${JSON.stringify(project.projectName)} ticketNumber=${JSON.stringify(project.projectName)}   onclick="viewTicket(this)">View</button>
+//             <button class="btn btn-warning btn-sm" customer=${JSON.stringify(project.projectName)} ticketNumber=${JSON.stringify(project.projectName)}   onclick="editTicket(this)">Edit</button>
+            
+//         </td>
+//     `;
+//         projectBody.appendChild(row);
+//             document.getElementById('filter-section').style.display = 'none';
+//         });
+//         // Parse the response JSON
+//         const projects = await response.json();
+//         let user_name = localStorage.getItem('user_name');
+//         let user_role = JSON.parse(localStorage.getItem('user_role'));
+//         console.log(user_name);
+//         if (user_access == ''){
+//             user_access = user_role.map(role => role.role_name);
+//         }
+//         // if (user_access.includes('Admin')){
+            
+            
+//         // }
+        
+        
+        
+        
+//     } catch (error) {
+//         console.error('There was a problem with the fetch operation:', error);
+//     } finally {
+//         // Hide loader after the API call
+//         console.log("final_entry");
+//         document.getElementById('loader-overlay-project').style.display = 'none';
+//     }
+
+//     document.getElementById("manage-user-card").style.display = "none";
+//     document.getElementById("user-table-card").style.display = "none";
+//     document.getElementById("project-table-card").style.display = "block";
+//     // document.getElementById("grid-view-project").style.display = "block";
+//     document.getElementById("manage_project").style.display = "block";
+//     document.getElementById('filter-section-project').style.display='none';
+//     document.getElementById('manage_role').style.display='none';
+//     document.getElementById('fromDateFilterProject').style.display='none';
+//     document.getElementById('toDateFilterProject').style.display='none';
+//     // document.getElementById('ProjectfilterCondition').style.display='block';
+//     document.getElementById('ProjectTableFilter').style.display='block';
+  
+
+// }
+
+async function showProject() {
+    // Hide UI elements
+    document.getElementById('ProjectfilterCondition').style.display = 'none';
+    document.getElementById('error-message-project').style.display = 'none';
+    document.getElementById('fromDateProject').classList.remove('input-error');
+    document.getElementById('endDateProject').classList.remove('input-error');
+
+    // Get date values from localStorage or inputs
+    let fromDateProject = localStorage.getItem('fromDateProject') || document.getElementById('fromDateProject').value;
+    let endDateProject = localStorage.getItem('endDateProject') || document.getElementById('endDateProject').value;
+
+    // Store dates in localStorage
+    localStorage.setItem('fromDate', fromDateProject);
+    localStorage.setItem('endDate', endDateProject);
+
+    // Validate dates
+    if (!fromDateProject || !endDateProject) {
+        document.getElementById('error-message-project').style.display = 'block';
+        if (!fromDateProject) document.getElementById('fromDateProject').classList.add('input-error');
+        if (!endDateProject) document.getElementById('endDateProject').classList.add('input-error');
+        return;
+    }
+
+    // Get authentication token
+    let accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+        window.location.href = 'login.html'; // Redirect to login if no token
+        return;
+    }
+
+    console.log("Fetching data from API...");
+
+    // Show loader
+    document.getElementById('loader-overlay-project').style.display = 'block';
+
+    try {
+        const response =  fetch('http://127.0.0.1:8000/api/user/getProject/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                "fromDate": fromDateProject,
+                "endDate": endDateProject
+            })
+        });
+
+        // Handle Unauthorized Response
+        if (response.status === 401) {
+            console.warn("Access token expired. Redirecting to login...");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`Network response was not ok, status: ${response.status}`);
+        }
+
+        // Parse response JSON
+        const project_response =  response.json();
+        console.log("API Response:", project_response);
+
+        // Check if the response is an object or an array
+        let projects = [];
+
+        if (Array.isArray(project_response)) {
+            projects = project_response;
+        } else if (typeof project_response === 'object') {
+            // If response is an object, try extracting an array from it
+            projects = project_response.projects || project_response.data || Object.values(project_response);
+        }
+
+        // Validate that projects is now an array
+        if (!Array.isArray(projects)) {
+            console.error("Error: API response is not an array:", project_response);
+            alert("Error: API did not return a valid projects array.");
+            return;
+        }
+
+        // Clear previous table data
+        const projectBody = document.getElementById('project-table-body');
+        projectBody.innerHTML = '';
+
+        // Populate table with API data
+        projects.forEach(project => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${project.projectName}</td>
+                <td>${project.projectTask}</td>
+                <td>${project.projectTaskDescription}</td>
+                <td>${project.assignedTo}</td>
+                <td>${project.status}</td>
+                <td class="action-buttons">
+                    <button class="btn btn-info btn-sm me-2" projectName=${JSON.stringify(project.projectName)} projectTask=${JSON.stringify(project.projectTask)} projectTaskDescription=${JSON.stringify(project.projectTaskDescription)} assignedTo=${JSON.stringify(project.assignedTo)} status=${JSON.stringify(project.status)} onclick="viewProject(this)">View</button>
+                    <button class="btn btn-warning btn-sm" projectName=${JSON.stringify(project.projectName)} projectTask=${JSON.stringify(project.projectTask)} projectTaskDescription=${JSON.stringify(project.projectTaskDescription)} assignedTo=${JSON.stringify(project.assignedTo)} status=${JSON.stringify(project.status)} onclick="editProject(this)">Edit</button>
+                </td>
+            `;
+            projectBody.appendChild(row);
+        });
+
+        // Hide the filter section after loading data
+        document.getElementById('filter-section').style.display = 'none';
+
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert(`Error: ${error.message}`);
+    } finally {
+        // Hide loader after API call
+        document.getElementById('loader-overlay-project').style.display = 'none';
+    }
+
+    // Show project table section
+    document.getElementById("manage-user-card").style.display = "none";
+    document.getElementById("user-table-card").style.display = "none";
+    document.getElementById("project-table-card").style.display = "block";
+    document.getElementById("manage_project").style.display = "block";
+    document.getElementById('filter-section-project').style.display = 'none';
+    document.getElementById('manage_role').style.display = 'none';
+    document.getElementById('fromDateFilterProject').style.display = 'none';
+    document.getElementById('toDateFilterProject').style.display = 'none';
+    document.getElementById('ProjectTableFilter').style.display = 'block';
+}
+
+function viewProject(projects) {
+    // Hide the ticket table and show the grid view
+    
+    // document.getElementById("manage-user-card").style.display = "none";
+    // document.getElementById("user-table-card").style.display = "none";
+
+    document.getElementById('successProjectMessage').style.display = 'none';
+    document.getElementById("project-table-card").style.display = "none";
+    document.getElementById("grid-view-project").style.display = "block";
+    document.getElementById("grid-view-project").style.display = "flex";
+    document.getElementById('manage_role').style.display='none';
+    // document.getElementById("manage_ticket").style.display = "block";
+    
+    document.getElementById('project').value = projects.getAttribute('project');
+    document.getElementById('projecttask').value = projects.getAttribute('projecttask');
+    document.getElementById('taskDescription').value = projects.getAttribute('taskDescription');
+    document.getElementById('task-done-by-project').value = projects.getAttribute('task-done-by-project');
+    document.getElementById('start-date').value = projects.getAttribute('start-date');
+    document.getElementById('end-date').value = projects.getAttribute('end-date');
+    document.getElementById('hours-spent').value = projects.getAttribute('hours-spent');
+    
+
+    const currentDate = new Date();
+
+    const formatDate = (date) => {
+            return date.toISOString().split('T')[0];
+        };
+        document.getElementById('start-date').value = formatDate(currentDate);
+        document.getElementById('end-date').value = formatDate(currentDate);
+        for (const key in AssigneeEnum) {
+            if (AssigneeEnum.hasOwnProperty(key)) {
+                console.log(AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0]));
+                if (AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0])) {
+                    console.log(AssigneeEnum[key].id);
+                    document.getElementById('task-done-by-project').setAttribute("done_id", AssigneeEnum[key].id);
+                    document.getElementById('task-done-by-project').value = AssigneeEnum[key].name;
+                    
+                    
+                }
+            }
+        }
+    // Populate grid view with ticket details (this would usually come from an API)
+    // if (ticketId === 1) {
+    //     document.getElementById("ticketTitle").value = "Server Issue";
+    //     document.getElementById("description").value = "Server down in the data center.";
+    //     document.getElementById("status").value = "Open";
+    // } else if (ticketId === 2) {
+    //     document.getElementById("ticketTitle").value = "Login Issue";
+    //     document.getElementById("description").value = "User unable to login.";
+    //     document.getElementById("status").value = "Resolved";
+    // }
+    // fetchAssigneesAndSetupDropdown('ticketAssignTo', tickets.getAttribute('assignedTo'))
+    populateDropdownAssignee('projectAssignTo',projects.getAttribute('assignedTo'));
+    // populateStatusDropdown(projects.getAttribute('status'));
+    // populatePriorityDropdown(projects.getAttribute('priority'));
+    document.getElementById('hours-spent').value = " ";
+    document.getElementById('project').readOnly = true;
+    document.getElementById('projecttask').readOnly = true;
+    document.getElementById('taskDescription').readOnly = true;
+    document.getElementById('task-done-by-project').readOnly = true;
+    document.getElementById('start-date').disabled = true;
+    document.getElementById('end-date').disabled = true;
+    document.getElementById('hours-spent').disabled = true;
+    document.getElementById("edit-buttonsProjects").style.display = "none";
+    document.getElementById("editButtonProject").style.display = "block";
+}
+
+function enableEditProject(ticketId) {
+    // Enable edit mode: make fields editable and show save/cancel buttons
+    console.log(ticketId);
+    document.getElementById('successProjectMessage').style.display = 'none';
+    document.getElementById("project-table-card").style.display = "none";
+    document.getElementById("grid-view").style.display = "block";
+    document.getElementById("grid-view-project").style.display = "block";
+    document.getElementById("editButtonProject").style.display = "none";
+    document.getElementById("edit-buttonsProject").style.display = "block";
+
+    document.getElementById('project').readOnly = true;
+    document.getElementById('projecttask').readOnly = true;
+    document.getElementById('taskDescription').readOnly = true;
+    document.getElementById('ticketDescription').readOnly = false;
+
+    document.getElementById("edit-buttonsProject").style.display = "block";
+    document.getElementById("editButtonProject").style.display = "none";
+
+    // let user_role = JSON.parse(localStorage.getItem('user_role'));
+    // if (user_access == ''){
+    //     user_access = user_role.map(role => role.role_name);
+    // }
+    
+    // if (user_access.includes('Admin')){
+    //     document.getElementById('ticketAssignTo').disabled = false;
+    //     document.getElementById('ticketPriority').disabled = false;
+    // }
+    // document.getElementById('ticketStatus').disabled = false;
+}
+
+function editProject(projects) {
+    // Hide the project table and show the grid view
+
+    const currentDate = new Date();
+
+    const formatDate = (date) => {
+        return date.toISOString().split('T')[0];
+    };
+    document.getElementById('hours-spent').value = "";
+    document.getElementById('hours-spent').disabled = false;
+    document.getElementById('successProjectMessage').style.display = 'none';
+    document.getElementById("project-table-card").style.display = "none";
+    document.getElementById("grid-view").style.display = "block";
+    document.getElementById("grid-view-project").style.display = "block";
+    document.getElementById("editButtonProject").style.display = "none";
+    document.getElementById("edit-buttonsProject").style.display = "block";
+
+    document.getElementById('project').value = projects.getAttribute('project');
+    document.getElementById('projecttask').value = projects.getAttribute('projecttask');
+    document.getElementById('taskDescription').value = projects.getAttribute('taskDescription');
+    document.getElementById('task-done-by-project').value = projects.getAttribute('task-done-by-project');
+    document.getElementById('start-date').value = projects.getAttribute('start-date');
+    document.getElementById('end-date').value = projects.getAttribute('end-date');
+    document.getElementById('hours-spent').value = projects.getAttribute('hours-spent');
+    
+    document.getElementById('start-date').value = formatDate(currentDate);
+    document.getElementById('end-date').value = formatDate(currentDate);
+    for (const key in AssigneeEnum) {
+        if (AssigneeEnum.hasOwnProperty(key)) {
+            console.log(AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0]));
+            if (AssigneeEnum[key].name.includes(localStorage.getItem('user_name').split(" ")[0])) {
+                document.getElementById('task-done-by-project').setAttribute("done_id", AssigneeEnum[key].id);
+                document.getElementById('task-done-by-project').value = AssigneeEnum[key].name;
+                
+            }
+        }
+    }
+    // Populate grid view with ticket details (sample data, typically from an API)
+    document.getElementById('hours-spent').disabled = false;
+    document.getElementById('project').readOnly = true;
+    document.getElementById('projecttask').readOnly = true;
+    document.getElementById('taskDescription').readOnly = true;
+    
+    // let user_role = JSON.parse(localStorage.getItem('user_role'));
+    
+     
+    //  if (user_access == ''){
+    //     user_access = user_role.map(role => role.role_name);
+    // }
+    // if (user_access.includes('Admin')){
+    //     document.getElementById('ticketAssignTo').disabled = false;
+    //     document.getElementById('ticketPriority').disabled = false;
+    // }
+
+    // document.getElementById('ticketAssignTo').disabled = false;
+    // document.getElementById('ticketPriority').disabled = false;
+    // document.getElementById('ticketStatus').disabled = false;
+    populateDropdownAssignee('projectAssignTo',projects.getAttribute('assignedTo'));
+    // populateStatusDropdown(tickets.getAttribute('status'));
+    // populatePriorityDropdown(tickets.getAttribute('priority'));
+    
+    // document.getElementById("editButton").style.display = "none";
+
+}
+
+function applyTableFiltersProject() {
+    const assignedToFilter = document.getElementById("filterAssignedToProject").value;
+    // const projectNumberFilter = document.getElementById("filterTicketNumber").value.toLowerCase();
+    const projectData = JSON.parse(localStorage.getItem('projects'));
+    const assignees = [...new Set(projectData.map(project => project.AssignedTo))];
+    console.log(assignees);
+    fetchAssigneesSetupFilterDropdown('filterAssignedToProject', assignees, assignedToFilter);
+    
+    //if(document.getElementById("filterTicketNumberContainer").style.display === 'block'){
+    //    const user_tickets = ticketData.filter(ticket => 
+    //        ticket.TicketNumber.includes(ticketNumberFilter)
+    //    );
+    //    
+    //    localStorage.setItem('filter_tickets', JSON.stringify(user_tickets));
+    //// fetchAssigneesAndSetupDropdown('ticketAssignTo', user_tickets.AssignedTo)
+    //    currentPage = 1;
+    //    paginateTickets(user_tickets, true);
+    //}
+    //else{
+    //    const user_tickets = ticketData.filter(ticket => 
+    //        ticket.AssignedTo.includes(assignedToFilter)
+    //    );
+    //    localStorage.setItem('filter_tickets', JSON.stringify(user_tickets));
+    //// fetchAssigneesAndSetupDropdown('ticketAssignTo', user_tickets.AssignedTo)
+    //    currentPage = 1;
+    //    paginateTickets(user_tickets, true);
+    //}
+    
+    // Set up ticket filtering logic if needed
+    // document.getElementById('filterAssignedToProject').addEventListener('change', () => {
+    //     const selectedAssignee = document.getElementById('filterAssignedToProject').value;
+    //     const filteredByAssignee = selectedAssignee
+    //         ? ticketData.filter(ticket => ticket.AssignedTo === selectedAssignee)
+    //         : ticketData;
+
+    //     paginateTickets(filteredByAssignee);
+    // });
+
+  
+    document.getElementById("manage-user-card").style.display = "none";
+    document.getElementById("user-table-card").style.display = "none";
+    document.getElementById("project-table-card").style.display = "block";
+    document.getElementById("grid-view-ticket").style.display = "none";
+    // document.getElementById("manage_project").style.display = "none";
+    document.getElementById('manage_role').style.display = 'none';
+    document.getElementById('ProjectTableFilter').style.display = 'none';
+    document.getElementById('clearFilterButtonProject').style.display = 'block';
+}
+
+function clearFilterProject(){
+    
+    document.getElementById('filterAssignedToProject').value = '';
+    //document.getElementById('filterTicketNumber').value = '';
+
+    // Refresh the dropdown without a selected assignee
+    showProject();
+    fetchAssigneesAndSetupDropdown('filterAssignedToProject','');
+    
+}
+
+function backToProject() {
+    // Show ticket table and hide the grid view
+    showProject();
+    document.getElementById("project-table-card").style.display = "block";
+    document.getElementById("manage_project").style.display = "block";
+    document.getElementById("grid-view-project").style.display = "none";
+    document.getElementById('manage_role').style.display='none';
+    // document.getElementById("grid-view").style.display = "none";
+}
+
+async function saveProjectChanges(){
+    document.getElementById('successProjectMessage').style.display= 'none';
+    let accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+        window.location.href = 'login.html'; // Redirect to login if no token
+    }
+    const body_data = {
+        "project": document.getElementById('project').value,
+        "project_Task": document.getElementById('projecttask').value,
+        "task_description": document.getElementById('taskDescription').value,
+        "task_done_by": document.getElementById('task-done-by-project').value,
+        "start-date": document.getElementById('start-date').value,
+        "end-date": document.getElementById("end-date").value,
+        "hours_spent": document.getElementById('hours-spent').value,
+    }
+    console.log(body_data);
+
+    try {
+        // Make an API call (replace 'your-api-endpoint' with actual URL)
+        const response = await fetch('/api/user/updateProject/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + accessToken,
+
+            },
+
+            body: JSON.stringify(body_data)
+        })
+
+        // Check if the response is ok
+
+        if (response.status === 401) {
+            console.warn("Access token expired. Redirecting to login...");
+            window.location.href = 'login.html';
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        // Parse the response JSON
+        console.log(response);
+        const apiResponse = await response.json();
+        if (apiResponse.status == "success") {
+            var successMessage = document.getElementById('successProjectMessage');
+            // successMessage.textContent = "User Created Successfully";
+            successMessage.style.display = 'block';
+            
+
+        }
+        // storeInLocalStorage("ticket_response", cachedData);
+        // Log the response to ensure data structure is correct
+        console.log(apiResponse);
+
+
+        // Call a function to populate the table
+        // backToTable();
+        // populateTable(1);
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
+
+
+}
+
+function paginateProjects(projects, filter_data=false) {
+    const paginatedProjects = projects.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+    displayProjects(paginatedProjects);
+    updatePagination(projects.length, filter_data);
+}
+
+function updatePagination(totalItems, filter_data) {
+    const pagination = document.getElementById('pagination-project');
+    pagination.innerHTML = ''; // Clear existing pagination
+
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const maxPageButtons = 5; // Number of page buttons to display
+    let startPage = Math.max(currentPage - Math.floor(maxPageButtons / 2), 1);
+    let endPage = Math.min(startPage + maxPageButtons - 1, totalPages);
+
+    // Adjust start and end if we are at the edge
+    if (endPage - startPage < maxPageButtons - 1) {
+        startPage = Math.max(1, endPage - maxPageButtons + 1);
+    }
+
+    // Previous button
+    console.log(filter_data);
+    if (currentPage > 1) {
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.addEventListener('click', () => {
+            currentPage--;
+            if (filter_data){
+                console.log("inside filter");
+                paginateTickets(JSON.parse(localStorage.getItem('filter_project')),true);    
+            }
+            else{
+
+                paginateTickets(JSON.parse(localStorage.getItem('projects')));
+            }
+            
+        });
+        pagination.appendChild(prevButton);
+    }
+
+    // Numbered page buttons
+    for (let i = startPage; i <= endPage; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.className = i === currentPage ? 'active' : '';
+        button.addEventListener('click', () => {
+            currentPage = i;
+            if (filter_data){
+                console.log("inside filter");
+                paginateTickets(JSON.parse(localStorage.getItem('filter_projects')), true);    
+            }
+            else{
+
+                paginateTickets(JSON.parse(localStorage.getItem('projects')));
+            }
+        });
+        pagination.appendChild(button);
+    }
+
+    // Next button
+    if (currentPage < totalPages) {
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.addEventListener('click', () => {
+            currentPage++;
+            if (filter_data){
+                console.log("inside filter");
+                paginateTickets(JSON.parse(localStorage.getItem('filter_projects')), true);    
+            }
+            else{
+
+                paginateTickets(JSON.parse(localStorage.getItem('projects')));
+            }
+        });
+        pagination.appendChild(nextButton);
+    }
+}
+
+function cancelEditProjectChanges(){
+    backToProject();
 }

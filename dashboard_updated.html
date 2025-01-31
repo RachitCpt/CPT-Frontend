@@ -47,7 +47,7 @@
                             <li class="dropdown-submenu">
                                 <a class="dropdown-item dropdown-toggle" href="#">Project</a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#" onclick="showProjects()">View Projects</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="openProjects()">View Projects</a></li>
                                 </ul>  
                             </li>
                         </ul>   
@@ -82,73 +82,156 @@
             </div>
         </div>
     </nav>
-    <!--Project Section-->
-    <div class="container mt-5 pt-4" id="project-section" style ="display:none">
-        <div class="header">Projects</div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>Task</th>
-                    <th>Task Description</th>
-                    <th>Assigned To</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Project A</td>
-                    <td>Task 1</td>
-                    <td>Design the homepage</td>
-                    <td>John Doe</td>
-                    <td>In Progress</td>
-                    <td>
-                        <button class="btn btn-info" onclick="viewProjectDetails('A', 'Task 1', 'Design the homepage', 'John Doe', 'In Progress')">View</button>
-                        <button class="btn btn-warning" onclick="viewProjectDetails('A', 'Task 1', 'Design the homepage', 'John Doe', 'In Progress')">Edit</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!--Project Section Ends-->
-    <!--Project Details Section Start-->
-    <div class="container mt-5" id="project-details-section"  style ="display:none">
-        <div class="container_2">
-            <button class="btn btn-secondary" onclick="backToProjects()">Back to Projects</button>
-            <div class="header">Project Details</div>
-            <form>
-                <div class="form-group">
-                    <label for="project">Project</label>
-                    <input type="text" id="project" name="project">
+    <!-- Project Section -->
+    <div class="container mt-5 pt-4" id="manage_project" style="display: none;">
+        <h4><strong>Manage Projects</strong></h4>
+        <div id="filter-section-project" class="p-3 mb-4 border rounded bg-light">
+            <!-- Error Message -->
+            <div id="error-message-project" class="alert alert-danger text-center" style="display: none;">Please select both dates!</div>
+        
+            <div class="row g-3">
+                <!-- From Date -->
+                <div class="col-md-3" id="fromDateFilterProject">
+                    <label for="fromDateProject" class="form-label fw-bold">From Date:</label>
+                    <input type="date" id="fromDateProject" class="form-control">
                 </div>
-                <div class="form-group">
-                    <label for="task">Project Task</label>
-                    <input type="text" id="task" name="task">
+        
+                <!-- To Date -->
+                <div class="col-md-3" id="toDateFilterProject">
+                    <label for="endDateProject" class="form-label fw-bold">To Date:</label>
+                    <input type="date" id="endDateProject" class="form-control">
                 </div>
-                <div class="form-group">
-                    <label for="description">Task Description</label>
-                    <textarea id="description" name="description" rows="3"></textarea>
+        
+                
+
+                <!-- Search Button -->
+                <div class="col-md-12 text-end">
+                    <button class="btn btn-primary mt-3 px-4" onclick="showProject()">Search</button>
                 </div>
-                <div class="form-group">
-                    <label for="task-done-by">Task Done By</label>
-                    <input type="text" id="task-done-by" name="task-done-by">
+            </div>
+        </div>
+        
+        
+        
+        <!-- Project Table Card View -->
+        <div class="card mt-4" id="project-table-card" >
+            <div class="card-header">
+                <h5 class="card-title">Project Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <!-- Filter Toggle -->
+                    <div class="col-md-12 text-center" id="ProjectTableFilter" style="display: none;">
+                        <span class="fw-bold">Filter by:</span>
+                        <a href="#" id="filterByAssignedToLinkProject" class="filter-link active">Assigned To</a> 
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="start-date">Start Date</label>
-                    <input type="date" id="start-date" name="start-date">
+                
+                <!-- Filters Section -->
+                <div class="row mb-3" id="ProjectfilterCondition" style="display: none;">
+                    <!-- Filter by Assigned To -->
+                    <div class="col-md-4" id="filterAssignedToContainerProject" style="display: none;">
+                        <label for="filterAssignedToProject" class="form-label fw-bold">Filter by Assigned To:</label>
+                        <select id="filterAssignedToProject" class="form-control">
+                            <option value="">All</option>
+                            <!-- Options populated dynamically -->
+                        </select>
+                    </div>
+                
+                
+                    <!-- Apply Filters Button -->
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100"  onclick="applyTableFiltersProject()" id="applyFilterButtonProject">Apply Filters</button>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary w-100"  onclick="clearFilterProject()" id="clearFilterButtonProject" style="display: none;">Clear</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="end-date">End Date</label>
-                    <input type="date" id="end-date" name="end-date">
+                
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                        <th>Project</th>
+                        <th>Task</th>
+                        <th>Task Description</th>
+                        <th>Assigned To</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="project-table-body">
+                        
+                    </tbody>
+                </table>
+                <div id="pagination-project" class="pagination"></div>
+            </div>
+        </div>
+    <!-- Project Section Ends -->
+    <!-- Project Details Section Start -->
+        <div id="loader-overlay-project" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
+            <div id="loader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                <img src="./img/trans.webp" alt="Loading...">
+            </div>
+        </div>
+        <div class="grid-view-tkt mt-4" id="grid-view-project" style="display: none;" >
+            <div id="successProjectMessage" class="alert alert-success" style="display: none;">
+                Changes saved successfully!
+            </div>    
+            <div class="card">
+                
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <button class="btn btn-secondary" onclick="backToProjects()">Back to Project</button>
+                    </div>
+                    <h5>Project Details</h5>
+                    
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="project" class="form-label">Project</label>
+                            <input type="text" class="form-control" id="project" readonly>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="projecttask" class="form-label">Project Task</label>
+                            <input type="text" class="form-control" id="projecttask" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="taskDescription" class="form-label">Task Description</label>
+                            <textarea class="form-control" id="taskDescription" rows="1" readonly></textarea>
+                            <!-- <input type="text" class="form-control" id="ticketDescription" readonly> -->
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="task-done-by-project" class="form-label">Task Done By</label>
+                            <input type="text" class="form-control" id="task-done-by-project" name="task-done-by-project" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="start-date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="start-date" name="start-date" readonly>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="end-date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="end-date" name="end-date" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="hours-spent" class="form-label">Hours Spent</label>
+                            <input type="number" class="form-control" id="hours-spent" name="hours-spent" step="0.5">
+                        </div>
+                    </div>
+                    <div id="edit-buttonsProject" style="display: none;">
+                        <button class="btn btn-primary" onclick="saveProjectChanges()">Save Changes</button>
+                        <button class="btn btn-secondary" onclick="cancelEditProjectChanges()">Cancel</button>
+                    </div>
+                    <button class="btn btn-warning" id="editButtonProject"onclick="enableEditProject(this)">Edit Project</button>
                 </div>
-                <div class="form-actions">
-                    <button type="submit" class="save-button">Save Changes</button>
-                    <button type="button" class="cancel-button">Cancel</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
+    <!-- Project Details Section Ends -->
     <!-- Main Content -->
    <div class="container mt-5 pt-4 text-center" id="home-card">
         <!-- <h1><strong>Welcome to The CPT-Dashboard</strong></h1> -->

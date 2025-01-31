@@ -336,6 +336,14 @@ body {
     /* Space between buttons */
 }
 
+.pagination-project {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 15px;
+    /* Space between buttons */
+}
+
 #date-selection-grid {
     margin: 20px;
     padding: 15px;
