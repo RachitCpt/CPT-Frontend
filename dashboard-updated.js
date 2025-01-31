@@ -1661,7 +1661,7 @@ function openProjects() {
     document.getElementById('fromDateFilterProject').style.display = 'block';
     document.getElementById('toDateFilterProject').style.display = 'block';
     document.getElementById("manage_project").style.display = "block";
-    document.getElementById('project-table-body').style.display = 'block';
+    // document.getElementById('project-table-body').style.display = 'block';
     // document.getElementById('ProjectTableFilter').style.display = 'block';
      // document.getElementById("project-table-card").style.display = "block";
     // document.getElementById('ProjectfilterCondition').style.display = 'none';
@@ -1851,9 +1851,9 @@ async function showProject() {
 
     // Show loader
     document.getElementById('loader-overlay-project').style.display = 'block';
-
+    
     try {
-        const response =  fetch('http://127.0.0.1:8000/api/user/getProject/', {
+        const response = await fetch('http://127.0.0.1:8000/api/user/getProject/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1864,7 +1864,10 @@ async function showProject() {
                 "endDate": endDateProject
             })
         });
-
+        data =  await response.json();
+        console.log(data);
+        response_project = Object.values(data);
+        console.log(response_project);
         // Handle Unauthorized Response
         if (response.status === 401) {
             console.warn("Access token expired. Redirecting to login...");
@@ -1876,50 +1879,9 @@ async function showProject() {
             throw new Error(`Network response was not ok, status: ${response.status}`);
         }
 
-        // Parse response JSON
-        const project_response =  response.json();
-        console.log("API Response:", project_response);
-
-        // Check if the response is an object or an array
-        let projects = [];
-
-        if (Array.isArray(project_response)) {
-            projects = project_response;
-        } else if (typeof project_response === 'object') {
-            // If response is an object, try extracting an array from it
-            projects = project_response.projects || project_response.data || Object.values(project_response);
-        }
-
-        // Validate that projects is now an array
-        if (!Array.isArray(projects)) {
-            console.error("Error: API response is not an array:", project_response);
-            alert("Error: API did not return a valid projects array.");
-            return;
-        }
-
         // Clear previous table data
-        const projectBody = document.getElementById('project-table-body');
-        projectBody.innerHTML = '';
-
-        // Populate table with API data
-        projects.forEach(project => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${project.projectName}</td>
-                <td>${project.projectTask}</td>
-                <td>${project.projectTaskDescription}</td>
-                <td>${project.assignedTo}</td>
-                <td>${project.status}</td>
-                <td class="action-buttons">
-                    <button class="btn btn-info btn-sm me-2" projectName=${JSON.stringify(project.projectName)} projectTask=${JSON.stringify(project.projectTask)} projectTaskDescription=${JSON.stringify(project.projectTaskDescription)} assignedTo=${JSON.stringify(project.assignedTo)} status=${JSON.stringify(project.status)} onclick="viewProject(this)">View</button>
-                    <button class="btn btn-warning btn-sm" projectName=${JSON.stringify(project.projectName)} projectTask=${JSON.stringify(project.projectTask)} projectTaskDescription=${JSON.stringify(project.projectTaskDescription)} assignedTo=${JSON.stringify(project.assignedTo)} status=${JSON.stringify(project.status)} onclick="editProject(this)">Edit</button>
-                </td>
-            `;
-            projectBody.appendChild(row);
-        });
-
-        // Hide the filter section after loading data
-        document.getElementById('filter-section').style.display = 'none';
+        populateProjectTable(response_project);
+        
 
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
@@ -1939,6 +1901,35 @@ async function showProject() {
     document.getElementById('fromDateFilterProject').style.display = 'none';
     document.getElementById('toDateFilterProject').style.display = 'none';
     document.getElementById('ProjectTableFilter').style.display = 'block';
+    
+}
+function populateProjectTable(data) {
+
+    if (!Array.isArray(data)) {
+        console.error("displayTickets received non-array data:", tickets);
+        return;
+    }
+    const projectBody = document.getElementById('project-table-body');
+    
+    // Clear previous table data
+    projectBody.innerHTML = '';
+
+    // Loop through response data and create table rows
+    data.forEach(project => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${project.projectName || 'N/A'}</td>
+            <td>${project.projectTask || 'N/A'}</td>
+            <td>${project.jobId || 'N/A'}</td>
+            <td>${project.assignedTo || 'N/A'}</td>
+            <td>${project.status || 'N/A'}</td>
+            <td class="action-buttons">
+                <button class="btn btn-info btn-sm me-2" onclick="viewProject(this)">View</button>
+                <button class="btn btn-warning btn-sm" onclick="editProject(this)">Edit</button>
+            </td>
+        `;
+        projectBody.appendChild(row);
+    });
 }
 
 function viewProject(projects) {
