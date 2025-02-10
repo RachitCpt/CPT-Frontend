@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="./CPT.jpg" alt="Company Logo" class="navbar-logo"> <!-- Logo Image -->
+                <img src=".C:\Users\Dell\nginx-1.26.2\html\CPT-Frontend\img\CPT.jpg" alt="Company Logo" class="navbar-logo"> <!-- Logo Image -->
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,9 @@
                             <li><a class="dropdown-item" href="#" id="newUserMenu" onclick="addNewUser()"> New User</a></li>
                             <li><a class="dropdown-item" href="#" id="manageRolesMenu" onclick="addNewRole()"> Manage Roles</a></li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="openVendors()">Vendors</a>
                     </li>
                 </ul>
 
@@ -196,14 +199,28 @@
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                             <label for="taskDescription" class="form-label">Task Description</label>
-                            <textarea class="form-control" id="taskDescription" rows="1" readonly></textarea>
+                            <textarea class="form-control" id="taskDescription" rows="1" ></textarea>
                             <!-- <input type="text" class="form-control" id="ticketDescription" readonly> -->
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                             <label for="task-done-by-project" class="form-label">Task Done By</label>
-                            <input type="text" class="form-control" id="task-done-by-project" name="task-done-by-project" readonly>
+                            <input type="text" class="form-control" id="task-done-by-project" name="task-done-by-project" >
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="assignedToProject" class="form-label">Assigned To</label>
+                            <input type="text" class="form-control" id="assignedToProject" name="assignedToProject" readonly>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="statusProject" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="statusProject" name="statusProject" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+                            <label for="hours-spentproject" class="form-label">Hours Spent</label>
+                            <input type="number" class="form-control" id="hours-spentproject" name="hours-spentproject" step="0.5">
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                             <label for="start-date" class="form-label">Start Date</label>
@@ -214,12 +231,6 @@
                             <input type="date" class="form-control" id="end-date" name="end-date" readonly>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="hours-spent" class="form-label">Hours Spent</label>
-                            <input type="number" class="form-control" id="hours-spent" name="hours-spent" step="0.5">
-                        </div>
-                    </div>
                     <div id="edit-buttonsProject" style="display: none;">
                         <button class="btn btn-primary" onclick="saveProjectChanges()">Save Changes</button>
                         <button class="btn btn-secondary" onclick="cancelEditProjectChanges()">Cancel</button>
@@ -228,10 +239,224 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>      
     <!-- Project Details Section Ends -->
+    <!--Vendor Section Starts-->
+    <div class="container mt-5 pt-4" id="manage_vendors" style="display: none;"> 
+        <div class="container mt-5 pt-4 grid-form" id="vendor_details">
+            <div class="form-group">
+                <label for="vendorname">Vendor Name</label>
+                <input type="text" id="vendorname"> 
+            </div>
+            <div class="form-group">
+                <label for="vendorcode">Vendor ID or Code</label>
+                <input type="text" id="vendorcode">
+            </div>
+            <div class="form-group">
+                <label for="ponumber">PO Number</label>
+                <input type="text" id="ponumber">
+            </div>
+            <div class="buttons">
+                <button class="btn btn-secondary" onclick="viewPO()">View PO</button>
+                <button class="btn btn-secondary" onclick="editPO()">Edit PO</button>
+            </div>
+        </div>
+        <div class="container mt-5 pt-4"  id="quicklinkvendor">
+            <h3>Quick Links</h3>
+            <div class="tile-row">
+                <button class="btn btn-secondary" onclick="createPO()">Create PO</button>
+                <button class="btn btn-secondary" onclick="createBill()">Create Bill</button>
+                <button class="btn btn-secondary" onclick="asn()">ASN</button>
+                <button class="btn btn-secondary" onclick="gatepass()">Gate Pass</button>
+            </div>
+        </div>
+        <!-- View,Edit and Create PO -->
+        <div class="container mt-5 pt-4" id="viewPO" style="display: none;">
+            <h4 id="headerdisplaymanage" style="display: none;"><strong>Manage Vendor</strong></h4>
+            <h4 id="headerdisplay" style="display: none;"><strong>Create Vendor</strong></h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
+            </div>   
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="vendornamePO">Vendor Name</label>
+                    <input type="text" id="vendornamePO">
+                </div>
+                <div class="form-group">
+                    <label for="podate">PO Date</label>
+                    <input type="text" id="podate">
+                </div>
+                <div class="form-group">
+                    <label for="poitem">Item</label>
+                    <input type="text" id="poitem">
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="text" id="quantity">
+                </div>
+                <div class="form-group">
+                    <label for="rate">Rate</label>
+                    <input type="text" id="rate">
+                </div>
+                <div class="form-group">
+                    <label for="vehicle">Vehicle</label>
+                    <input type="text" id="vehicle">
+                </div>
+                <div class="form-group">
+                    <label for="approvalstatus">Approval Status</label>
+                    <input type="text" id="approvalstatus">
+                </div>
+                <div class="form-group">
+                    <label for="subsidiary">Subsidiary</label>
+                    <input type="text" id="subsidiary">
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location">
+                </div>
+                <div id="edit-buttonsvendor" style="display: none;">
+                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
+                </div>
+                <button class="btn btn-warning" id="editButtonvendor" onclick="editPO()">Edit Vendor</button>
+            </div>
+        </div>
+        <!-- Create Bill Section -->
+        <div class="container mt-5 pt-4"  id="createBill" style="display: none;">
+            <h4><strong>Create Bill</strong></h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
+            </div>   
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="vendornamebill">Vendor Name</label>
+                    <input type="text" id="vendornamebill">
+                </div>
+                <div class="form-group">
+                    <label for="account">Account</label>
+                    <input type="text" id="account">
+                </div>
+                <div class="form-group">
+                    <label for="billitem">Item</label>
+                    <input type="text" id="billitem">
+                </div>
+                <div class="form-group">
+                    <label for="billquantity">Quantity</label>
+                    <input type="text" id="billquantity">
+                </div>
+                <div class="form-group">
+                    <label for="billrate">Rate</label>
+                    <input type="text" id="billrate">
+                </div>
+                <div class="form-group">
+                    <label for="billapprovalstatus">Approval Status</label>
+                    <input type="text" id="billapprovalstatus">
+                </div>
+                <div class="form-group">
+                    <label for="billlocation">Location</label>
+                    <input type="text" id="billlocation">
+                </div>
+                <div class="form-group">
+                    <label for="billsubsidiary">Subsidiary</label>
+                    <input type="text" id="billsubsidiary">
+                </div>
+                <div id="edit-buttonsvendorbill">
+                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
+                </div>
+            </div>
+        </div>
+         <!-- Create ASN Section -->
+         <div class="container mt-5 pt-4"  id="asn" style="display: none;">
+            <h4><strong>Create ASN</strong></h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
+            </div>   
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="vendornameasn">Vendor Name</label>
+                    <input type="text" id="vendornameasn">
+                </div>
+                <div class="form-group">
+                    <label for="asnnumber">ASN Number</label>
+                    <input type="text" id="asnnumber">
+                </div>
+                <div class="form-group">
+                    <label for="asnitem">Item</label>
+                    <input type="text" id="asnitem">
+                </div>
+                <div class="form-group">
+                    <label for="asnquantity">Quantity</label>
+                    <input type="text" id="asnquantity">
+                </div>
+                <div class="form-group">
+                    <label for="asnrate">Rate</label>
+                    <input type="text" id="asnrate">
+                </div>
+                <div class="form-group">
+                    <label for="addressdispatch">Address Details (Dispatch)</label>
+                    <input type="text" id="addressdispatch">
+                </div>
+                <div class="form-group">
+                    <label for="addressreceive">Address Details (Receive)</label>
+                    <input type="text" id="addressreceive">
+                </div>
+                <div id="edit-buttonsvendorasn">
+                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
+                </div>
+            </div>
+        </div>
+         <!-- Create GatePass Section -->
+        <div class="container mt-5 pt-4"  id="gatepass" style="display: none;">
+            <h4><strong>Create Gate Pass</strong></h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
+            </div>   
+            <div class="grid-form">
+                <div class="form-group">
+                    <label for="vendornamegp">Vendor Name</label>
+                    <input type="text" id="vendornamegp">
+                </div>
+                <div class="form-group">
+                    <label for="ponumbergp">PO Number</label>
+                    <input type="text" id="ponumbergp">
+                </div>
+                <div class="form-group">
+                    <label for="gpitem">Item</label>
+                    <input type="text" id="gpitem">
+                </div>
+                <div class="form-group">
+                    <label for="gpquantity">Quantity</label>
+                    <input type="text" id="gpquantity">
+                </div>
+                <div class="form-group">
+                    <label for="gprate">Rate</label>
+                    <input type="text" id="gprate">
+                </div>
+                <div class="form-group">
+                    <label for="vehiclenumber">Vehichle Number</label>
+                    <input type="text" id="vehiclenumber">
+                </div>
+                <div class="form-group">
+                    <label for="gateentrydate">Gate Entry Date</label>
+                    <input type="text" id="gateentrydate">
+                </div>
+                <div class="form-group">
+                    <label for="gateentrynumber">Gate Entry Number</label>
+                    <input type="text" id="gateentrynumber">
+                </div>
+                <div id="edit-buttonsvendorgp">
+                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!--Vendor Section Ends-->
     <!-- Main Content -->
-   <div class="container mt-5 pt-4 text-center" id="home-card">
+   <div class="container mt-5 pt-4 text-center scrollable-container" id="home-card">
         <!-- <h1><strong>Welcome to The CPT-Dashboard</strong></h1> -->
 
         <div class="dashboard">
@@ -265,12 +490,13 @@
                         <i class="fas fa-ticket"></i>
                         <h4>View Ticket</h4>
                     </div>
+                    <div class="tile" onclick="navigateTo('viewProject')" id="viewProjectTile">
+                        <!-- <i class="fas fa-ticket"></i> -->
+                        <h4>View Project</h4>
+                    </div>
                 </div>
             </div>
         </div>
-        
-
-        
     </div>
     
     <div class="container mt-5 pt-4 " id="manage-user-card">
@@ -611,7 +837,7 @@
     <!-- Footer -->
     <footer class="footer mt-auto">
         <div class="container text-center">
-            <p>&copy; 2024 Connate People Technology.</p>
+            <p>&copy; 2025 Connate People Technology.</p>
             <small>Version 1.0.0</small>
         </div>
     </footer>

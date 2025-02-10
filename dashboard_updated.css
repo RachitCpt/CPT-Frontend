@@ -7,13 +7,13 @@
 
 /* Scrollbar track */
 .scrollable-container::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
+    width: 0px; /* Width of the scrollbar */
 }
 
 /* Scrollbar handle */
 .scrollable-container::-webkit-scrollbar-thumb {
-    background-color: #0056b3; /* Color of the scroll handle */
-    border-radius: 10px; /* Rounded corners */
+    background-color: #0056b3; 
+    border-radius: 10px; 
 }
 
 /* Scrollbar handle on hover */
@@ -674,7 +674,7 @@ th {
     opacity: 0.8;
 }
 /* end of project section css */
-/* start of project from section css */
+/* start of project form section css */
 
 .container_2 {
     width: 80%;
@@ -758,7 +758,7 @@ th {
     opacity: 0.8;
 }
 
-/* end of project from section css */
+/* end of project form section css */
 
 
    
