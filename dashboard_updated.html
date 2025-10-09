@@ -1,845 +1,891 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CPT-Dashboard</title>
- 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="./dashboard_updated.css">
-    <link rel="stylesheet" href="./home-latest.css">
-</head>
 
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link rel="stylesheet" href="./dashboard_updated.css" />
+    <link rel="stylesheet" href="./home-latest.css" />
+  </head>
+  <script>
+    console.log("🚀 Dashboard page loading...");
+
+    // Log current token immediately
+    //console.log("Token at page start:", localStorage.getItem("access_token"));
+
+    // Log changes to localStorage continuously
+    const originalSetItem = localStorage.setItem;
+    const originalRemoveItem = localStorage.removeItem;
+    const originalClear = localStorage.clear;
+
+    localStorage.setItem = function (key, value) {
+      //console.log(`🔹 localStorage.setItem called: ${key} = ${value}`);
+      originalSetItem.apply(this, arguments);
+    };
+
+    localStorage.removeItem = function (key) {
+      //console.log(`🔸 localStorage.removeItem called: ${key}`);
+      originalRemoveItem.apply(this, arguments);
+    };
+
+    localStorage.clear = function () {
+      console.log(`❌ localStorage.clear() called`);
+      originalClear.apply(this, arguments);
+    };
+
+    // Keep logging token every half second
+    // setInterval(() => {
+    //   console.log("Token now:", localStorage.getItem("access_token"));
+    // }, 500);
+  </script>
+
+  <body>
     <!-- Header / Navbar -->
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src=".C:\Users\Dell\nginx-1.26.2\html\CPT-Frontend\img\CPT.jpg" alt="Company Logo" class="navbar-logo"> <!-- Logo Image -->
-            </a>
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <img src="./CPT.jpg" alt="Company Logo" class="navbar-logo" />
+          <!-- Logo Image -->
+        </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left-aligned navigation items -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="viewHome()">Home</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <!-- Left-aligned navigation items -->
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="viewHome()">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Transaction</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarMasterDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Master
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarMasterDropdown">
+                <li class="dropdown-submenu">
+                  <a class="dropdown-item dropdown-toggle" href="#">Tickets</a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="#"
+                        onclick="open_form_filter()"
+                        >View All Tickets</a
+                      >
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Transaction</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarMasterDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Master
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarMasterDropdown">
-                            <li class="dropdown-submenu">
-                                <a class="dropdown-item dropdown-toggle" href="#">Ticket</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#" onclick="open_form_filter()">View Ticket</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown-submenu">
-                                <a class="dropdown-item dropdown-toggle" href="#">Project</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#" onclick="openProjects()">View Projects</a></li>
-                                </ul>  
-                            </li>
-                        </ul>   
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Setup
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#" id="manageUsersMenu" onclick="loadUserTable()">Manage Users</a></li>
-                            <li><a class="dropdown-item" href="#" id="newUserMenu" onclick="addNewUser()"> New User</a></li>
-                            <li><a class="dropdown-item" href="#" id="manageRolesMenu" onclick="addNewRole()"> Manage Roles</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="openVendors()">Vendors</a>
-                    </li>
-                </ul>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Setup
+              </a>
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    id="managerecenttickets"
+                    onclick="loadrecenttickets()"
+                    >Recent Tickets</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    id="managemytickets"
+                    onclick="loadmytickets()"
+                  >
+                    My Tickets</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    id="unassignedtickets"
+                    onclick="loadunassignedtickets()"
+                  >
+                    Unassigned Tickets</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="expenseReport()"
+                >Expense Report</a
+              >
+            </li>
+          </ul>
 
-                <!-- Right-aligned user menu -->
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUserLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user user-icon"></i> <span id="user_name_display"></span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUserLink" id="rolesDropdownUser">
-                            
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="logout-btn" onclick="logout()">Logout</a>
-                    </li>
-                    
-                </ul>
-            </div>
+          <!-- Right-aligned user menu -->
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdownUserLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fas fa-user user-icon"></i>
+                <span id="user_name_display"></span>
+              </a>
+              <ul
+                class="dropdown-menu"
+                aria-labelledby="navbarDropdownUserLink"
+                id="rolesDropdownUser"
+              ></ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="logout-btn" onclick="logout()"
+                >Logout</a
+              >
+            </li>
+          </ul>
         </div>
+      </div>
     </nav>
-    <!-- Project Section -->
-    <div class="container mt-5 pt-4" id="manage_project" style="display: none;">
-        <h4><strong>Manage Projects</strong></h4>
-        <div id="filter-section-project" class="p-3 mb-4 border rounded bg-light">
-            <!-- Error Message -->
-            <div id="error-message-project" class="alert alert-danger text-center" style="display: none;">Please select both dates!</div>
-        
-            <div class="row g-3">
-                <!-- From Date -->
-                <div class="col-md-3" id="fromDateFilterProject">
-                    <label for="fromDateProject" class="form-label fw-bold">From Date:</label>
-                    <input type="date" id="fromDateProject" class="form-control">
-                </div>
-        
-                <!-- To Date -->
-                <div class="col-md-3" id="toDateFilterProject">
-                    <label for="endDateProject" class="form-label fw-bold">To Date:</label>
-                    <input type="date" id="endDateProject" class="form-control">
-                </div>
-        
-                
 
-                <!-- Search Button -->
-                <div class="col-md-12 text-end">
-                    <button class="btn btn-primary mt-3 px-4" onclick="showProject()">Search</button>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-        <!-- Project Table Card View -->
-        <div class="card mt-4" id="project-table-card" >
-            <div class="card-header">
-                <h5 class="card-title">Project Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <!-- Filter Toggle -->
-                    <div class="col-md-12 text-center" id="ProjectTableFilter" style="display: none;">
-                        <span class="fw-bold">Filter by:</span>
-                        <a href="#" id="filterByAssignedToLinkProject" class="filter-link active" onclick="showFilterProject('assignedTo')">Assigned To</a> 
-                    </div>
-                </div>
-                
-                <!-- Filters Section -->
-                <div class="row mb-3" id="ProjectfilterCondition" style="display: none;">
-                    <!-- Filter by Assigned To -->
-                    <div class="col-md-4" id="filterAssignedToContainerProject" style="display: none;">
-                        <label for="filterAssignedToProject" class="form-label fw-bold">Filter by Assigned To:</label>
-                        <select id="filterAssignedToProject" class="form-control">
-                            <option value="">All</option>
-                            <!-- Options populated dynamically -->
-                        </select>
-                    </div>
-                
-                
-                    <!-- Apply Filters Button -->
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button class="btn btn-primary w-100"  onclick="applyTableFiltersProject()" id="applyFilterButtonProject">Apply Filters</button>
-                    </div>
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button class="btn btn-primary w-100"  onclick="clearFilterProject()" id="clearFilterButtonProject" style="display: none;">Clear</button>
-                    </div>
-                </div>
-                
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                        <th>Project</th>
-                        <th>Task</th>
-                        <th>Task Description</th>
-                        <th>Assigned To</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="project-table-body">
-                        
-                    </tbody>
-                </table>
-                <div id="pagination-project" class="pagination"></div>
-            </div>
-        </div>
-    <!-- Project Section Ends -->
-    <!-- Project Details Section Start -->
-        <div id="loader-overlay-project" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
-            <div id="loader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                <img src="./img/trans.webp" alt="Loading...">
-            </div>
-        </div>
-        <div class="grid-view-tkt mt-4" id="grid-view-project" style="display: none;" >
-            <div id="successProjectMessage" class="alert alert-success" style="display: none;">
-                Changes saved successfully!
-            </div>    
-            <div class="card">
-                
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <button class="btn btn-secondary" onclick="backToProject()">Back to Project</button>
-                    </div>
-                    <h5>Project Details</h5>
-                    
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="project" class="form-label">Project</label>
-                            <input type="text" class="form-control" id="project" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="projecttask" class="form-label">Project Task</label>
-                            <input type="text" class="form-control" id="projecttask" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="taskDescription" class="form-label">Task Description</label>
-                            <textarea class="form-control" id="taskDescription" rows="1" ></textarea>
-                            <!-- <input type="text" class="form-control" id="ticketDescription" readonly> -->
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="task-done-by-project" class="form-label">Task Done By</label>
-                            <input type="text" class="form-control" id="task-done-by-project" name="task-done-by-project" >
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="assignedToProject" class="form-label">Assigned To</label>
-                            <input type="text" class="form-control" id="assignedToProject" name="assignedToProject" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="statusProject" class="form-label">Status</label>
-                            <input type="text" class="form-control" id="statusProject" name="statusProject" readonly>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="hours-spentproject" class="form-label">Hours Spent</label>
-                            <input type="number" class="form-control" id="hours-spentproject" name="hours-spentproject" step="0.5">
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="start-date" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="start-date" name="start-date" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="end-date" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="end-date" name="end-date" readonly>
-                        </div>
-                    </div>
-                    <div id="edit-buttonsProject" style="display: none;">
-                        <button class="btn btn-primary" onclick="saveProjectChanges()">Save Changes</button>
-                        <button class="btn btn-secondary" onclick="cancelEditProjectChanges()">Cancel</button>
-                    </div>
-                    <button class="btn btn-warning" id="editButtonProject"onclick="enableEditProject(this)">Edit Project</button>
-                </div>
-            </div>
-        </div>
-    </div>      
-    <!-- Project Details Section Ends -->
-    <!--Vendor Section Starts-->
-    <div class="container mt-5 pt-4" id="manage_vendors" style="display: none;"> 
-        <div class="container mt-5 pt-4 grid-form" id="vendor_details">
-            <div class="form-group">
-                <label for="vendorname">Vendor Name</label>
-                <input type="text" id="vendorname"> 
-            </div>
-            <div class="form-group">
-                <label for="vendorcode">Vendor ID or Code</label>
-                <input type="text" id="vendorcode">
-            </div>
-            <div class="form-group">
-                <label for="ponumber">PO Number</label>
-                <input type="text" id="ponumber">
-            </div>
-            <div class="buttons">
-                <button class="btn btn-secondary" onclick="viewPO()">View PO</button>
-                <button class="btn btn-secondary" onclick="editPO()">Edit PO</button>
-            </div>
-        </div>
-        <div class="container mt-5 pt-4"  id="quicklinkvendor">
+    <!-- Main Content -->
+    <div class="container mt-5 pt-4 text-center" id="home-card">
+      <!-- <h1><strong>Welcome to The CPT-Dashboard</strong></h1> -->
+      <div class="dashboard">
+        <div class="left-panel">
+          <!-- Reminders Section -->
+          <div class="reminders">
+            <h3>Reminders</h3>
+            <ul>
+              <li><strong id="high-count">0</strong> High Priority Tickets</li>
+              <li>
+                <strong id="medium-count">0</strong> Medium Priority Tickets
+              </li>
+              <li><strong id="low-count">0</strong> Low Priority Tickets</li>
+            </ul>
+          </div>
+
+          <!-- Quick Links Section -->
+          <div class="quick-links">
             <h3>Quick Links</h3>
             <div class="tile-row">
-                <button class="btn btn-secondary" onclick="createPO()">Create PO</button>
-                <button class="btn btn-secondary" onclick="createBill()">Create Bill</button>
-                <button class="btn btn-secondary" onclick="asn()">ASN</button>
-                <button class="btn btn-secondary" onclick="gatepass()">Gate Pass</button>
+              <div
+                class="tile"
+                onclick="navigateTo('recenttickets')"
+                id="recentticketstile"
+              >
+                <i class="fas fa-ticket"></i>
+                <h4>Recent Tickets</h4>
+              </div>
+              <div
+                class="tile"
+                onclick="navigateTo('mytickets')"
+                id="myticketsTile"
+              >
+                <i class="fas fa-ticket"></i>
+                <h4>My Tickets</h4>
+              </div>
+              <div
+                class="tile"
+                onclick="navigateTo('unassignedtickets')"
+                id="unassignedticketsTile"
+              >
+                <i class="fas fa-ticket"></i>
+                <h4>Unassigned Tickets</h4>
+              </div>
+              <div
+                class="tile"
+                onclick="navigateTo('viewTicket')"
+                id="viewTicketTile"
+              >
+                <i class="fas fa-ticket"></i>
+                <h4>View All Tickets</h4>
+              </div>
             </div>
-        </div>
-        <!-- View,Edit and Create PO -->
-        <div class="container mt-5 pt-4" id="viewPO" style="display: none;">
-            <h4 id="headerdisplaymanage" style="display: none;"><strong>Manage Vendor</strong></h4>
-            <h4 id="headerdisplay" style="display: none;"><strong>Create Vendor</strong></h4>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
-            </div>   
-            <div class="grid-form">
-                <div class="form-group">
-                    <label for="vendornamePO">Vendor Name</label>
-                    <input type="text" id="vendornamePO">
-                </div>
-                <div class="form-group">
-                    <label for="podate">PO Date</label>
-                    <input type="text" id="podate">
-                </div>
-                <div class="form-group">
-                    <label for="poitem">Item</label>
-                    <input type="text" id="poitem">
-                </div>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="text" id="quantity">
-                </div>
-                <div class="form-group">
-                    <label for="rate">Rate</label>
-                    <input type="text" id="rate">
-                </div>
-                <div class="form-group">
-                    <label for="vehicle">Vehicle</label>
-                    <input type="text" id="vehicle">
-                </div>
-                <div class="form-group">
-                    <label for="approvalstatus">Approval Status</label>
-                    <input type="text" id="approvalstatus">
-                </div>
-                <div class="form-group">
-                    <label for="subsidiary">Subsidiary</label>
-                    <input type="text" id="subsidiary">
-                </div>
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location">
-                </div>
-                <div id="edit-buttonsvendor" style="display: none;">
-                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
-                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
-                </div>
-                <button class="btn btn-warning" id="editButtonvendor" onclick="editPO()">Edit Vendor</button>
-            </div>
-        </div>
-        <!-- Create Bill Section -->
-        <div class="container mt-5 pt-4"  id="createBill" style="display: none;">
-            <h4><strong>Create Bill</strong></h4>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
-            </div>   
-            <div class="grid-form">
-                <div class="form-group">
-                    <label for="vendornamebill">Vendor Name</label>
-                    <input type="text" id="vendornamebill">
-                </div>
-                <div class="form-group">
-                    <label for="account">Account</label>
-                    <input type="text" id="account">
-                </div>
-                <div class="form-group">
-                    <label for="billitem">Item</label>
-                    <input type="text" id="billitem">
-                </div>
-                <div class="form-group">
-                    <label for="billquantity">Quantity</label>
-                    <input type="text" id="billquantity">
-                </div>
-                <div class="form-group">
-                    <label for="billrate">Rate</label>
-                    <input type="text" id="billrate">
-                </div>
-                <div class="form-group">
-                    <label for="billapprovalstatus">Approval Status</label>
-                    <input type="text" id="billapprovalstatus">
-                </div>
-                <div class="form-group">
-                    <label for="billlocation">Location</label>
-                    <input type="text" id="billlocation">
-                </div>
-                <div class="form-group">
-                    <label for="billsubsidiary">Subsidiary</label>
-                    <input type="text" id="billsubsidiary">
-                </div>
-                <div id="edit-buttonsvendorbill">
-                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
-                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
-                </div>
-            </div>
-        </div>
-         <!-- Create ASN Section -->
-         <div class="container mt-5 pt-4"  id="asn" style="display: none;">
-            <h4><strong>Create ASN</strong></h4>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
-            </div>   
-            <div class="grid-form">
-                <div class="form-group">
-                    <label for="vendornameasn">Vendor Name</label>
-                    <input type="text" id="vendornameasn">
-                </div>
-                <div class="form-group">
-                    <label for="asnnumber">ASN Number</label>
-                    <input type="text" id="asnnumber">
-                </div>
-                <div class="form-group">
-                    <label for="asnitem">Item</label>
-                    <input type="text" id="asnitem">
-                </div>
-                <div class="form-group">
-                    <label for="asnquantity">Quantity</label>
-                    <input type="text" id="asnquantity">
-                </div>
-                <div class="form-group">
-                    <label for="asnrate">Rate</label>
-                    <input type="text" id="asnrate">
-                </div>
-                <div class="form-group">
-                    <label for="addressdispatch">Address Details (Dispatch)</label>
-                    <input type="text" id="addressdispatch">
-                </div>
-                <div class="form-group">
-                    <label for="addressreceive">Address Details (Receive)</label>
-                    <input type="text" id="addressreceive">
-                </div>
-                <div id="edit-buttonsvendorasn">
-                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
-                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
-                </div>
-            </div>
-        </div>
-         <!-- Create GatePass Section -->
-        <div class="container mt-5 pt-4"  id="gatepass" style="display: none;">
-            <h4><strong>Create Gate Pass</strong></h4>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-secondary" onclick="backToVendor()">Back to Vendor</button> 
-            </div>   
-            <div class="grid-form">
-                <div class="form-group">
-                    <label for="vendornamegp">Vendor Name</label>
-                    <input type="text" id="vendornamegp">
-                </div>
-                <div class="form-group">
-                    <label for="ponumbergp">PO Number</label>
-                    <input type="text" id="ponumbergp">
-                </div>
-                <div class="form-group">
-                    <label for="gpitem">Item</label>
-                    <input type="text" id="gpitem">
-                </div>
-                <div class="form-group">
-                    <label for="gpquantity">Quantity</label>
-                    <input type="text" id="gpquantity">
-                </div>
-                <div class="form-group">
-                    <label for="gprate">Rate</label>
-                    <input type="text" id="gprate">
-                </div>
-                <div class="form-group">
-                    <label for="vehiclenumber">Vehichle Number</label>
-                    <input type="text" id="vehiclenumber">
-                </div>
-                <div class="form-group">
-                    <label for="gateentrydate">Gate Entry Date</label>
-                    <input type="text" id="gateentrydate">
-                </div>
-                <div class="form-group">
-                    <label for="gateentrynumber">Gate Entry Number</label>
-                    <input type="text" id="gateentrynumber">
-                </div>
-                <div id="edit-buttonsvendorgp">
-                    <button class="btn btn-primary" onclick="savevendorChanges()">Save Changes</button>
-                    <button class="btn btn-secondary" onclick="cancelEditvendorChanges()">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-   
-    <!--Vendor Section Ends-->
-    <!-- Main Content -->
-   <div class="container mt-5 pt-4 text-center scrollable-container" id="home-card">
-        <!-- <h1><strong>Welcome to The CPT-Dashboard</strong></h1> -->
-
-        <div class="dashboard">
-            <!-- Reminders Section -->
-            <div class="reminders">
-                <h3>Reminders</h3>
-                <ul>
-                    <li><strong>10</strong> High Priority Tickets</li>
-                    <li><strong>15</strong> Medium Priority Tickets</li>
-                    <li><strong>5</strong> Low Priority Tickets</li>
-                </ul>
-            </div>
-        
-            <!-- Quick Links Section -->
-            <div class="quick-links">
-                <h3>Quick Links</h3>
-                <div class="tile-row">
-                    <div class="tile" onclick="navigateTo('manageUsers')" id="manageUserTile">
-                        <i class="fas fa-users"></i>
-                        <h4>Manage Users</h4>
-                    </div>
-                    <div class="tile" onclick="navigateTo('manageRoles')" id="manageRoleTile">
-                        <i class="fas fa-user-cog"></i>
-                        <h4>Manage Roles</h4>
-                    </div>
-                    <div class="tile" onclick="navigateTo('newUser')" id="newUserTile">
-                        <i class="fas fa-user-plus"></i>
-                        <h4>New User</h4>
-                    </div>
-                    <div class="tile" onclick="navigateTo('viewTicket')" id="viewTicketTile">
-                        <i class="fas fa-ticket"></i>
-                        <h4>View Ticket</h4>
-                    </div>
-                    <div class="tile" onclick="navigateTo('viewProject')" id="viewProjectTile">
-                        <!-- <i class="fas fa-ticket"></i> -->
-                        <h4>View Project</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container mt-5 pt-4 " id="manage-user-card">
-        <h4><strong>Manage Users</strong></h4>
-        
-
-        <!-- User Information Table -->
-        <div class="card mt-4" id="user-table-card">
-            <div class="card-header">
-                <h5 class="card-title">User Information</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Mobile Number</th>
-                            <th>Role</th>
-                            <th id="actions-header" style="display: none;">Actions</th> <!-- New column for actions -->
-                        </tr>
-                    </thead>
-                    <tbody id="user-table-body">
-                       
-                        <tr class="details-row" id="details-row-1">
-                            <td colspan="7">
-                                <div id="detailsContent-1" class="table-responsive">
-                                    <!-- User details will be populated here -->
-                                </div>
-                            </td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-                
-            </div>
+          </div>
         </div>
 
-        <!-- Grid View for User Details -->
-        <div class="grid-view mt-4" id="grid-view" style="display: none;">
-            <div id="successMessage" class="alert alert-success" style="display: none;">
-                Changes saved successfully!
-            </div>
-            
-            <!-- <div id="errorMessage" class="alert alert-danger" style="display: none;">
-                Passwords do not match!
-            </div> -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-secondary" onclick="backToTable()">Back to User List</button>
-            </div>
-            <div class="grid-form">
-                <!-- <h5>User Details</h5> -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <div id="error-firstName" class="text-danger small" style="display: none;">First Name is required.</div>
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="firstName" onblur="validateField('firstName', 'First Name is required')" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <div id="error-lastName" class="text-danger small" style="display: none;">Last Name is required.</div>
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="lastName" onblur="validateField('lastName', 'Last Name is required')" readonly>
-                        </div>
-                    </div>
+        <!-- Vendors Section -->
+        <div class="right-panel">
+          <!-- Vendors Section -->
+          <div class="vendors">
+            <h3>Recently Created Vendors</h3>
+            <table id="vendor-table">
+              <thead>
+                <tr>
+                  <th>Vendor ID</th>
+                  <th>Company Name</th>
+                  <th>Primary Subsidiary</th>
+                  <th>Date Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="4">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-                    
-                </div>
-                <!-- <div class="mb-3">
-                    <label for="employee_id" class="form-label">EmployeeID</label>
-                    <input type="employee_id" class="form-control" id="employee_id" readonly>
-                </div> -->
-                <div class="mb-3">
-                    <div id="error-email" class="text-danger small" style="display: none;">Email is required.</div>
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" onblur="validateField('email', 'Email is required')" onfocus="checkEmailFormat('email', 'Invalid email format')"required>
-                </div>
-                <div class="mb-3" id="passwordField" style="display: none;">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password">
-                    
-                </div>
-                <div class="mb-3" id="confirmPasswordField" style="display: none;">
-                    <div id="errorMessage" class="text-danger " style="display: none;">Passwords do not match.</div>
-                    <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="confirmPassword"  onblur="validatePassword()">
-                    
-                </div>
-                <div class="mb-3">
-                    <div id="errorMobile" class="text-danger " style="display: none;">Mobile is not Correct.</div>
-                    <label for="mobile" class="form-label">Mobile Number</label>
-                    <input type="text" class="form-control" id="mobile" onkeypress="return isNumberKey(event)" onblur="validateMobile(this)"  readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="role" class="form-label">Role</label>
-                    <select class="form-select" id="rolesDropdown" multiple aria-label="Role"></select>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                        <button class="btn btn-primary me-2" id="saveChangesBtn" onclick="saveChanges(this)">Save Changes</button>
-                        <button class="btn btn-secondary" id="cancelBtn" onclick="backToTable()">Cancel</button>
-                    </div>
-                    
-                </div>
-                
-                <button class="btn btn-secondary" id = "edit_buttons_v" onclick="enable_edit()" style="display: none;">Edit</button>
-                <button class="btn btn-secondary" id = "cancel_buttons_v" onclick="backToTable()" style="display: none;">Cancel</button>
-            </div>
+          <!-- Expense Reports Section -->
+          <div class="expenses">
+            <h3>My Expense Reports</h3>
+            <table id="expenseReportsTable">
+              <!-- Changed ID -->
+              <thead>
+                <tr>
+                  <th>Report ID</th>
+                  <th>Report No</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
 
-    <!-- Role  Creation Form -->
-    
-    <div class="container mt-5 pt-4 scrollable-container" id="manage_role" style="display: none;">
-        <h4><strong>Manage Roles</strong></h4>
-        <div id="successMessageRole" class="alert alert-success" style="display: none;">
-            Role Created successfully!
-        </div>
-        
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <button class="btn btn-primary me-2" id="saveChangesBtn" onclick="saveRoles(this)">Save</button>
-                <button class="btn btn-secondary" id="cancelBtn" onclick="backToHome()">Cancel</button>
+    <form id="expenseForm" class="expense-report">
+      <h2>Expense Reimbusrement Form</h2>
+      <div class="expense-section-card">
+        <h2>Section 1: Employee Information</h2>
+        <div class="expense-section">
+          <!-- First Row: Employee & Date -->
+          <div class="expense-form-row">
+            <div class="expense-form-group">
+              <label>Employee:</label>
+              <input type="text" name="employee" readonly />
             </div>
-            
+            <div class="expense-form-group">
+              <label>Date:</label>
+              <input type="date" id="todayDate" name="date" />
+            </div>
+          </div>
+
+          <!-- Second Row: Posting Date & Currency -->
+          <div class="expense-form-row">
+            <div class="expense-form-group">
+              <label>Posting Date:</label>
+              <input type="text" name="posting_date" />
+              <!-- <input type="date" name="posting_date" required> -->
+            </div>
+            <div class="expense-form-group">
+              <label>Currency:</label>
+              <select name="currency" id="currency" required>
+                <option value="">Select</option>
+                <option value="1">IND (INR)</option>
+                <option value="2">US Dollar (USD)</option>
+                <option value="3">Canadian Dollar (CAD)</option>
+                <option value="4">Euro (EUR)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Third Row: Exchange Rate -->
+          <div class="expense-form-row">
+            <div class="expense-form-group">
+              <label>Exchange Rate:</label>
+              <input
+                type="number"
+                step="0.0001"
+                name="exchange_rate"
+                placeholder="Enter exchange rate"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="expense-section-card">
+        <h2>Section 2: Expense Details</h2>
+        <div class="expense-section expense-table-wrapper">
+          <table id="expenseTable" class="expense-table">
+            <thead>
+              <tr>
+                <th>Sr. No</th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Expense Account</th>
+                <th>Currency</th>
+                <th>Amount</th>
+                <th>Rate</th>
+                <th>Quantity</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><input type="date" required /></td>
+                <td>
+                  <select required>
+                    <option value="">Select</option>
+                    <option value="1">Travel</option>
+                    <option>Meals</option>
+                    <option>Supplies</option>
+                    <option>Other</option>
+                  </select>
+                </td>
+                <td>
+                  <select required>
+                    <option value="">Select</option>
+                    <option value="272">
+                      Civil and Repairs works at Govt School - Under HDW's CSR
+                    </option>
+                    <option value="248">Cleaning</option>
+                    <option value="217">Direct Labor</option>
+                    <option value="58">Expenses</option>
+                    <option value="273">Furnitures and Fixtures</option>
+                    <option value="230">Gain and Loss Account</option>
+                    <option value="218">Indirect Labor</option>
+                    <option value="276">Inventory Adjustment</option>
+                    <option value="247">Loundry</option>
+                    <option value="244">Promotion</option>
+                    <option value="282">Provision for Expense</option>
+                    <option value="246">Rent</option>
+                    <option value="245">Travel</option>
+                    <option value="238">Scrap Account</option>
+                    <option value="239">Unbuild Variance Account</option>
+                    <option value="237">WIP Cost Variance Account</option>
+                    <option value="224">Rounding Gain/Loss</option>
+                    <option value="267">Unrealized Gain/Loss</option>
+                    <option value="268">Unrealized Matching Gain/Loss</option>
+                  </select>
+                </td>
+                <td>
+                  <select required>
+                    <option value="">Select</option>
+                    <option value="1">IND (INR)</option>
+                    <option value="2">US Dollar (USD)</option>
+                    <option value="3">Canadian Dollar (CAD)</option>
+                    <option value="4">Euro (EUR)</option>
+                  </select>
+                </td>
+                <td><input type="number" step="0.01" /></td>
+                <td><input type="number" step="0.01" /></td>
+                <td><input type="number" step="1" /></td>
+                <td>
+                  <button
+                    type="button"
+                    class="expense-btn expense-btn-danger"
+                    onclick="removeRow(this)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button
+            type="button"
+            class="expense-btn expense-btn-primary"
+            onclick="addRow()"
+          >
+            Add Row
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="expense-section expense-actions">
+        <button type="submit" class="expense-btn expense-btn-primary">
+          Save
+        </button>
+        <button type="reset" class="expense-btn expense-btn-secondary">
+          Cancel
+        </button>
+      </div>
+    </form>
+
+    <!--  Recent Tickets-->
+    <div class="container mt-5 pt-4" id="manage-recent-tickets">
+      <!-- <h4><strong>Manage Users</strong></h4> -->
+      <h4><strong>Recent Created Tickets</strong></h4>
+      <div class="card mt-4" id="recentticket-table-card">
+        <div class="card-header">
+          <h5 class="card-title">Ticket Information</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Ticket Number</th>
+                <th>Raised Date</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Priority</th>
+                <th>Inbound Email</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="recentticket-table-body"></tbody>
+          </table>
+          <div id="recentticket-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </div>
+    <!--  Recent Tickets End -->
+
+    <!--  My Tickets-->
+
+    <div class="container mt-5 pt-4" id="manage_mytickets">
+      <!-- <h4><strong>Manage Roles</strong></h4> -->
+      <h4><strong>My Tickets</strong></h4>
+      <div class="card mt-4" id="myticket-table-card">
+        <div class="card-header">
+          <h5 class="card-title">Ticket Information</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Ticket Number</th>
+                <th>Raised Date</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Priority</th>
+                <th>Inbound Email</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="myticket-table-body"></tbody>
+          </table>
+          <div id="myticket-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!--  My Tickets End -->
+
+    <!--  Unassigned Tickets-->
+
+    <div class="container mt-5 pt-4" id="manage_unassignedtickets">
+      <!-- <h4><strong>Manage Roles</strong></h4> -->
+      <h4><strong>Unassigned Tickets</strong></h4>
+      <div class="card mt-4" id="unassignedticket-table-card">
+        <div class="card-header">
+          <h5 class="card-title">Ticket Information</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Ticket Number</th>
+                <th>Raised Date</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Priority</th>
+                <th>Inbound Email</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="unassignedticket-table-body"></tbody>
+          </table>
+          <div id="unassignedticket-pagination" class="pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!--  Unassigned Tickets End -->
+
+    <div class="container mt-5 pt-4" id="manage_ticket" style="display: none">
+      <h4><strong>Manage Tickets</strong></h4>
+      <div id="filter-section" class="p-3 mb-4 border rounded bg-light">
+        <!-- Error Message -->
+        <div
+          id="error-message"
+          class="alert alert-danger text-center"
+          style="display: none"
+        >
+          Please select both dates!
         </div>
 
-        
-        <div class="row" id="manage-role-section">
-            
-            <div class="col-md-4">
-                <label for="roleName" class="form-label">Role Name</label>
-                <input type="text" class="form-control" id="roleName" required>
+        <div class="row g-3">
+          <!-- From Date -->
+          <div class="col-md-3" id="fromDateFilter">
+            <label for="fromDate" class="form-label fw-bold">From Date:</label>
+            <input type="date" id="fromDate" class="form-control" />
+          </div>
 
-            </div>
-            <!-- <div class="col-md-4">
-                <label for="role_id" class="form-label">Role ID</label>
-                <input type="role_id" class="form-control" id="role_id">
-            </div> -->
-            
-        </div>
-        </div>
+          <!-- To Date -->
+          <div class="col-md-3" id="toDateFilter">
+            <label for="toDate" class="form-label fw-bold">To Date:</label>
+            <input type="date" id="toDate" class="form-control" />
+          </div>
 
-    <!--  Role Creation Form End -->
-    
-    
-    <div class="container mt-5 pt-4" id="manage_ticket" style="display: none;">
-        <h4><strong>Manage Tickets</strong></h4>
-        <div id="filter-section" class="p-3 mb-4 border rounded bg-light">
-            <!-- Error Message -->
-            <div id="error-message" class="alert alert-danger text-center" style="display: none;">Please select both dates!</div>
-        
-            <div class="row g-3">
-                <!-- From Date -->
-                <div class="col-md-3" id="fromDateFilter">
-                    <label for="fromDate" class="form-label fw-bold">From Date:</label>
-                    <input type="date" id="fromDate" class="form-control">
-                </div>
-        
-                <!-- To Date -->
-                <div class="col-md-3" id="toDateFilter">
-                    <label for="toDate" class="form-label fw-bold">To Date:</label>
-                    <input type="date" id="toDate" class="form-control">
-                </div>
-        
-                
+          <!-- Customer Filter -->
+          <div class="col-md-3" id="customerFilter">
+            <label for="filterCustomer" class="form-label fw-bold"
+              >Customer:</label
+            >
+            <select id="filterCustomer" class="form-control">
+              <option value="">Select Customer</option>
+            </select>
+          </div>
 
-                <!-- Search Button -->
-                <div class="col-md-12 text-end">
-                    <button class="btn btn-primary mt-3 px-4" onclick="showTicket()">Search</button>
-                </div>
-            </div>
+          <!-- Search Button -->
+          <div class="col-md-12 text-end">
+            <button class="btn btn-primary mt-3 px-4" onclick="showTicket()">
+              Search
+            </button>
+          </div>
         </div>
-        
-        
-        
-        <!-- Tickets Table Card View -->
-        <div class="card mt-4" id="ticket-table-card" >
-            <div class="card-header">
-                <h5 class="card-title">Ticket Information</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <!-- Filter Toggle -->
-                    <div class="col-md-12 text-center" id="ticketTableFilter" style="display: none;">
-                        <span class="fw-bold">Filter by:</span>
-                        <a href="#" id="filterByAssignedToLink" class="filter-link active" onclick="showFilter('assignedTo')">Assigned To</a> |
-                        <a href="#" id="filterByTicketNumberLink" class="filter-link" onclick="showFilter('ticketNumber')">Ticket Number</a>
-                    </div>
-                </div>
-                
-                <!-- Filters Section -->
-                <div class="row mb-3" id="filterCondition" style="display: none;">
-                    <!-- Filter by Assigned To -->
-                    <div class="col-md-4" id="filterAssignedToContainer" style="display: none;">
-                        <label for="filterAssignedTo" class="form-label fw-bold">Filter by Assigned To:</label>
-                        <select id="filterAssignedTo" class="form-control">
-                            <option value="">All</option>
-                            <!-- Options populated dynamically -->
-                        </select>
-                    </div>
-                
-                    <!-- Filter by Ticket Number -->
-                    <div class="col-md-4" id="filterTicketNumberContainer" style="display: none;">
-                        <label for="filterTicketNumber" class="form-label fw-bold">Filter by Ticket Number:</label>
-                        <input type="text" id="filterTicketNumber" class="form-control" placeholder="Enter Ticket Number">
-                    </div>
-                
-                    <!-- Apply Filters Button -->
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" onclick="applyTableFilters()" id="applyFilterButton">Apply Filters</button>
-                    </div>
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button class="btn btn-primary w-100" onclick="clearFilter()" id="clearFilterButton" style="display: none;">Clear</button>
-                    </div>
-                </div>
-                
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            
-                        <th>Customer</th>
-                        <th>Ticket Number</th>
-                        <th>Raised Date</th>
-                        <th>Description</th>
-                        <th>Assigned To</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ticket-table-body">
-                        
-                    </tbody>
-                </table>
-                <div id="pagination" class="pagination"></div>
-            </div>
+      </div>
+
+      <!-- Tickets Table Card View -->
+      <div class="card mt-4" id="ticket-table-card">
+        <div class="card-header">
+          <h5 class="card-title">Ticket Information</h5>
         </div>
-    
-        <!-- Grid View for Ticket Details -->
-        <!-- <div id="loader" style="display: none; text-align: center;">
+        <div class="card-body">
+          <div class="row mb-3">
+            <!-- Filter Toggle -->
+            <div
+              class="col-md-12 text-center"
+              id="ticketTableFilter"
+              style="display: none"
+            >
+              <span class="fw-bold">Filter by:</span>
+              <a
+                href="#"
+                id="filterByAssignedToLink"
+                class="filter-link active"
+                onclick="showFilter('assignedTo')"
+                >Assigned To</a
+              >
+              |
+              <a
+                href="#"
+                id="filterByTicketNumberLink"
+                class="filter-link"
+                onclick="showFilter('ticketNumber')"
+                >Ticket Number</a
+              >
+            </div>
+          </div>
+
+          <!-- Filters Section -->
+          <div class="row mb-3" id="filterCondition" style="display: none">
+            <!-- Filter by Assigned To -->
+            <div
+              class="col-md-4"
+              id="filterAssignedToContainer"
+              style="display: none"
+            >
+              <label for="filterAssignedTo" class="form-label fw-bold"
+                >Filter by Assigned To:</label
+              >
+              <select id="filterAssignedTo" class="form-control">
+                <option value="">All</option>
+              </select>
+            </div>
+            <!-- Filter by Ticket Number -->
+            <div
+              class="col-md-4"
+              id="filterTicketNumberContainer"
+              style="display: none"
+            >
+              <label for="filterTicketNumber" class="form-label fw-bold"
+                >Filter by Ticket Number:</label
+              >
+              <input
+                type="text"
+                id="filterTicketNumber"
+                class="form-control"
+                placeholder="Enter Ticket Number"
+              />
+            </div>
+
+            <!-- Apply Filters Button -->
+            <div class="col-md-4 d-flex align-items-end">
+              <button
+                class="btn btn-primary w-100"
+                onclick="applyTableFilters()"
+                id="applyFilterButton"
+              >
+                Apply Filters
+              </button>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button
+                class="btn btn-primary w-100"
+                onclick="clearFilter()"
+                id="clearFilterButton"
+                style="display: none"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Ticket Number</th>
+                <th>Raised Date</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Priority</th>
+                <th>Inbound Email</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ticket-table-body"></tbody>
+          </table>
+          <div id="ticket-pagination" class="pagination"></div>
+        </div>
+      </div>
+
+      <!-- Grid View for Ticket Details -->
+      <!-- <div id="loader" style="display: none; text-align: center;">
             <img src="./img/Spinner-3.gif" alt="Loading...">
         </div> -->
-        <div id="loader-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 9999;">
-            <div id="loader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                <img src="./img/trans.webp" alt="Loading...">
-            </div>
+      <div
+        id="loader-overlay"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 9999;
+        "
+      >
+        <div
+          id="loader"
+          style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+          "
+        >
+          <img src="./img/trans.webp" alt="Loading..." />
         </div>
-        <div class="grid-view-tkt mt-4" id="grid-view-ticket" >
-            <div id="successTicketMessage" class="alert alert-success" style="display: none;">
-                Changes saved successfully!
-            </div>    
-            <div class="card">
-                
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <button class="btn btn-secondary" onclick="backToTicket()">Back to Ticket</button>
-                    </div>
-                    <h5>Ticket Details</h5>
-                    
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticketCustomer" class="form-label">Customer</label>
-                            <input type="text" class="form-control" id="ticketCustomer" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticket-ticketNumber" class="form-label">Ticket Number</label>
-                            <textarea class="form-control" id="ticket-ticketNumber" rows="1" readonly></textarea>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticketRaisedDate" class="form-label">Raised Date</label>
-                            <input type="text" class="form-control" id="ticketRaisedDate" readonly>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticketDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="ticketDescription" rows="1" readonly></textarea>
-                            <!-- <input type="text" class="form-control" id="ticketDescription" readonly> -->
-                        </div>
-                        
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticketAssignTo" class="form-label">Assigned To</label>
-                            <select class="form-control" id="ticketAssignTo" disabled>
-                                <!-- Role options will be populated here -->
-                            </select>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticketPriority" class="form-label">Priority</label>
-                            <select class="form-control" id="ticketPriority" disabled>
-                                  
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="ticketStatus" class="form-label">Status</label>
-                            <select class="form-control" id="ticketStatus" disabled>
-                                  
-                            </select>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="start-date" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="start-date" name="start-date" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="end-date" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="end-date" name="end-date" readonly>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="hours-spent" class="form-label">Hours Spent</label>
-                            <input type="number" class="form-control" id="hours-spent" name="hours-spent" step="0.5">
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-                            <label for="task-done-by" class="form-label">Task Done By</label>
-                            <input type="text" class="form-control" id="task-done-by" name="task-done-by" readonly>
-                        </div>
-                        
-                    </div>
-                    
-                    <div id="edit-buttons" style="display: none;">
-                        <button class="btn btn-primary" onclick="saveTicketChanges()">Save Changes</button>
-                        <button class="btn btn-secondary" onclick="cancelEditTicketChanges()">Cancel</button>
-                    </div>
-                    <button class="btn btn-warning" id="editButton" onclick="enableEdit(this)">Edit Ticket</button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-    
 
-    
+    <div class="grid-view-tkt" id="grid-view-ticket">
+      <div
+        id="successTicketMessage"
+        class="alert alert-success"
+        style="display: none"
+      >
+        Changes saved successfully!
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="btn btn-secondary" onclick="backToTicket()">
+              Back to Ticket
+            </button>
+          </div>
+          <h5>Ticket Details</h5>
+
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticketCustomer" class="form-label">Customer</label>
+              <select class="form-control" id="ticketCustomer">
+                <option value="">Select Customer</option>
+              </select>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticket-ticketNumber" class="form-label"
+                >Ticket Number</label
+              >
+              <textarea
+                class="form-control"
+                id="ticket-ticketNumber"
+                rows="1"
+                readonly
+              ></textarea>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticketRaisedDate" class="form-label"
+                >Raised Date</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="ticketRaisedDate"
+                readonly
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticketDescription" class="form-label"
+                >Description</label
+              >
+              <textarea
+                class="form-control"
+                id="ticketDescription"
+                rows="1"
+                readonly
+              ></textarea>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticketStatus" class="form-label">Status</label>
+              <select class="form-control" id="ticketStatus" disabled></select>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticketPriority" class="form-label">Priority</label>
+              <select
+                class="form-control"
+                id="ticketPriority"
+                disabled
+              ></select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticket-inboundemail" class="form-label"
+                >Inbound Email Address</label
+              >
+              <input
+                type="text"
+                id="ticket-inboundemail"
+                class="form-control"
+              />
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="ticketAssignTo" class="form-label">Assigned To</label>
+              <select class="form-control" id="ticketAssignTo" disabled>
+                <!-- Role options will be populated here -->
+              </select>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="start-date-hours" class="form-label"
+                >Start Date</label
+              >
+              <input
+                type="date"
+                class="form-control"
+                id="start-date-hours"
+                name="start-date"
+                readonly
+              />
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="end-date-hours" class="form-label">End Date</label>
+              <input
+                type="date"
+                class="form-control"
+                id="end-date-hours"
+                name="end-date"
+                readonly
+              />
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="hours-spent" class="form-label">Hours Spent</label>
+              <input
+                type="number"
+                class="form-control"
+                id="hours-spent"
+                name="hours-spent"
+                step="0.5"
+                min="0.5"
+                oninput="this.value = Math.max(this.value, 0.5)"
+              />
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+              <label for="task-done-by" class="form-label">Task Done By</label>
+              <input
+                type="text"
+                class="form-control"
+                id="task-done-by"
+                name="task-done-by"
+                readonly
+              />
+            </div>
+          </div>
+
+          <div id="edit-buttons" style="display: none">
+            <button class="btn btn-primary" onclick="saveTicketChanges()">
+              Save Changes
+            </button>
+            <button
+              class="btn btn-secondary"
+              onclick="cancelEditTicketChanges()"
+            >
+              Cancel
+            </button>
+          </div>
+          <button
+            class="btn btn-warning"
+            id="editButton"
+            onclick="enableEdit()"
+          >
+            Edit Ticket
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer mt-auto">
-        <div class="container text-center">
-            <p>&copy; 2025 Connate People Technology.</p>
-            <small>Version 1.0.0</small>
-        </div>
+      <div class="container text-center">
+        <p>&copy; <span id="currentYear"></span> Connate People Technology.</p>
+        <small>Version 1.0.0</small>
+      </div>
     </footer>
 
     <!-- Bootstrap JS (requires Popper for dropdowns) -->
@@ -849,17 +895,23 @@
 
     <script src="./dashboard-updated.js"></script>
     <script>
-    
-     document.querySelectorAll('.dropdown-submenu').forEach(function(submenu) {
-    submenu.addEventListener('mouseover', function() {
-        submenu.querySelector('.dropdown-menu').style.opacity = '1';
-    });
-    submenu.addEventListener('mouseout', function() {
-        submenu.querySelector('.dropdown-menu').style.opacity = '0';
-    });
-});
-   </script>
-    
-</body>
+      document
+        .querySelectorAll(".dropdown-submenu")
+        .forEach(function (submenu) {
+          submenu.addEventListener("mouseover", function () {
+            submenu.querySelector(".dropdown-menu").style.opacity = "1";
+          });
+          submenu.addEventListener("mouseout", function () {
+            submenu.querySelector(".dropdown-menu").style.opacity = "0";
+          });
+        });
+    </script>
+    <script>
+      // Get the current year
+      const currentYear = new Date().getFullYear();
 
+      // Update the span element with the current year
+      document.getElementById("currentYear").textContent = currentYear;
+    </script>
+  </body>
 </html>
