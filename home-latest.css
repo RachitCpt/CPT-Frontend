@@ -1,3 +1,151 @@
+.dashboard {
+  display: flex;
+  align-items: flex-start; /* Align top of left and right panels */
+  gap: 20px;               /* Space between left and right panels */
+}
+
+/* Left panel: Reminders + Quick Links stacked */
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;               /* Space between sections */
+  flex: 1;                  /* Take proportional width */
+  max-width: 350px;         /* Optional fixed max width */
+}
+
+/* Right panel: Vendors + Expense Reports stacked vertically */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;               /* Space between vendors and expense reports */
+  flex: 2;                 /* Take more space than left panel */
+}
+
+/* Vendors / Expense Reports Sections */
+.vendors {
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: white;
+  height: 350px;            /* You can adjust or remove for auto-height */
+}
+.expenses {
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  border-radius: 10px;
+  background-color: white;
+  height: 315px;            /* You can adjust or remove for auto-height */
+  margin-bottom: 20px;
+}
+
+/* Target only Vendor Table */
+#vendor-table {
+  width: 1050px;
+  height:50px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin-top: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table Header */
+#vendor-table th {
+  background-color: #f1f3f5; /* Light grey background */
+  color: #333;
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Table Body Rows */
+#vendor-table tbody tr {
+  background-color: #f1f3f5; /* default row background */
+  transition: background 0.3s;
+}
+
+/* Alternate row color */
+#vendor-table tbody tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+/* Hover effect */
+#vendor-table tbody tr:hover {
+  background-color: #e6f7ff;
+}
+
+/* Table Cells */
+#vendor-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+/* Optional: Loading row */
+#vendor-table tbody tr td[colspan="4"] {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  background-color: #fafafa;
+}
+
+/* Target only Expense Table */
+#expenseTable {
+  width: 1050px;
+  height: 180px;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin-top: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow:hidden;
+}
+
+/* Table Header */
+#expenseTable th {
+  background-color: #f1f3f5; /* Light grey background */
+  color: #333;
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Table Body Rows */
+#expenseTable tbody tr {
+  background-color: #f1f3f5 ;/* default row background */
+  transition: background 0.3s;
+}
+
+/* Alternate row color */
+#expenseTable tbody tr:nth-child(even) {
+  background-color: #f1f3f5;
+}
+
+/* Hover effect */
+#expenseTable tbody tr:hover {
+  background-color: #e6f7ff;
+}
+
+/* Table Cells */
+#expenseTable td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+/* Optional: Loading row */
+#expenseTable tbody tr td[colspan="4"] {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  background-color: #fafafa;
+}
+
 
 
 .reminders  {
@@ -44,7 +192,7 @@
 
 .quick-links  {
     width: 250px;
-    height: 350px;
+    height: 250px;
     margin: 20px 0;
     padding: 20px;
     border: 1px solid #ccc;
@@ -77,3 +225,4 @@
     margin-bottom: 10px;
     color: #5d93cd;
 }
+
